@@ -1,0 +1,5 @@
+
+# examples that users are looking forward to seeing inside the configuration
+Test:
+  - <Test: void <clinit>()>
+  - <Test: void tester()>

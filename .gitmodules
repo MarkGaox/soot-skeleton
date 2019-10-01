@@ -1,0 +1,3 @@
+[submodule "test-resource/android-platforms"]
+	path = test-resource/android-platforms
+	url = https://github.com/izgzhen/android-platforms

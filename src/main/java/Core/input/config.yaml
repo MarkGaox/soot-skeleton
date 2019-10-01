@@ -1,0 +1,8 @@
+# this class should be edited by users to give out basic information for their analysis
+
+apk: "false"
+javaClass: "true"
+# Use it only for apk
+entryPoint: "<Need to be either empty or methods signiture>"
+pathToSource: "<Need path to be to the path to source (apk/jar/javaClass)>"
+outputPath: "<User prefered output path>"
