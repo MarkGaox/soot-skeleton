@@ -1,7 +1,6 @@
 package SootExample;
 
 import fj.data.Option;
-import soot.jimple.infoflow.android.SetupApplication;
 import java.util.*;
 
 import soot.BodyTransformer;

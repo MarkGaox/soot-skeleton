@@ -6,3 +6,4 @@ Initialize submodule:
 ```
 git submodule update --init
 ```
+For more resources, please check wiki.

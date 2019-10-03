@@ -20,13 +20,9 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.InvokeStmt;
 import soot.jimple.Jimple;
 import soot.jimple.StringConstant;
-import soot.jimple.infoflow.android.entryPointCreators.AndroidEntryPointCreator;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.options.Options;
-import soot.jimple.infoflow.android.SetupApplication;
-import soot.jimple.infoflow.entryPointCreators.*;
 import soot.util.Chain;
-import sun.nio.ch.sctp.SctpNet;
 
 public class CallGraphAnalysis {
     public static void main(String[] args) {
@@ -44,8 +40,8 @@ public class CallGraphAnalysis {
     }
 
     private static void cha() {
-        SetupApplication app = new
-                SetupApplication("android-platforms/android-28/android.jar","test-resource/HelloWorld.apk");
+//        SetupApplication app = new
+//                SetupApplication("android-platforms/android-28/android.jar","test-resource/HelloWorld.apk");
 
 //        AndroidEntryPointCreator entryPointCreator = new AndroidEntryPointCreator();
 
