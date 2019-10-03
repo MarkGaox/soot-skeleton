@@ -62,7 +62,7 @@ public class Analysis {
         soot.G.reset();
         Options.v().set_process_dir(Collections.singletonList("test-resource"));
         Options.v().set_src_prec(Options.src_prec_class);
-        Options.v().set_soot_classpath("test-resource/DemoClass.java");
+        Options.v().set_soot_classpath("test-resource");
         Options.v().set_whole_program(true);
         Options.v().set_allow_phantom_refs(true);
         Options.v().set_verbose(true);
@@ -74,7 +74,7 @@ public class Analysis {
 
         Scene.v().addBasicClass("DemoClass", SootClass.BODIES);
     //    Scene.v().loadClassAndSupport("DemoClass");
-        SootClass testClass = Scene.v().getSootClass("java.lang.Long");
+        SootClass testClass = Scene.v().getSootClass("DemoClass");
 
         Options.v().setPhaseOption("cg", "on");
         List<SootClass> classes = Scene.v().getClasses(1);
@@ -86,9 +86,9 @@ public class Analysis {
         }
 
 
-//        SootMethod method = testClass.getMethodByName("main");
-//        System.out.println(method.getModifiers());
-//        System.out.println(method.retrieveActiveBody());
+        SootMethod method = testClass.getMethodByName("main");
+        System.out.println(method.getModifiers());
+        System.out.println(method.retrieveActiveBody());
         List<SootMethod> methodList = testClass.getMethods();
         for (SootMethod md : methodList) {
             if (md.isStatic()) {
