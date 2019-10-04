@@ -5,5 +5,5 @@ javaClass: "true"
 # Use it only for apk
 pathToSource: "<Need path to be to the path to source (apk/jar/javaClass)>"
 outputPath: "<User prefered output path>"
-#Use for java source code file
-
+# Use for java source code file
+pathTOClassDirectory: "test-resource"
