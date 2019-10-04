@@ -3,28 +3,16 @@ package SootExample;
 import fj.data.Option;
 import java.util.*;
 
-import soot.BodyTransformer;
-import soot.Local;
-import soot.PackManager;
-import soot.PatchingChain;
-import soot.RefType;
-import soot.Scene;
-import soot.SootClass;
-import soot.SootMethod;
+import soot.*;
 import soot.jimple.toolkits.callgraph.*;
 import soot.options.Options;
 import soot.jimple.InstanceInvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.StringConstant;
-import soot.MethodOrMethodContext;
 import soot.PackManager;
 import soot.Scene;
-import soot.SceneTransformer;
 import soot.SootClass;
 import soot.SootMethod;
-import soot.Transform;
-import soot.Body;
-import soot.Unit;
 
 
 public class Analysis {
@@ -129,18 +117,30 @@ public class Analysis {
 
 
 //        Options.v().set_ignore_resolution_errors(true);
-//        Options.v().set_no_bodies_for_excluded(false);
+        Options.v().set_no_bodies_for_excluded(true);
         Options.v().set_verbose(true);
 //        Scene.v().addBasicClass("DemoClass", SootClass.SIGNATURES);
- //       Scene.v().loadClassAndSupport("DemoClass");
+        Scene.v().loadClassAndSupport("DemoClass");
         Scene.v().loadNecessaryClasses();
         SootClass testClass = Scene.v().getSootClass("DemoClass");
 
-
+//        Options.v().setPhaseOption("cg.spark", "on");
+ //       Pack pk = PackManager.v().getPack("jtp");
+        PackManager.v().runPacks();
+        CallGraph cg = Scene.v().getCallGraph();
         List<SootMethod> allMethods = testClass.getMethods();
         for (SootMethod md : allMethods) {
             System.out.println(md);
 //            System.out.println(md.retrieveActiveBody());
+            Iterator<Edge> outEdges = cg.edgesOutOf(md);
+
+            while (outEdges.hasNext()) {
+                System.out.println(md.getSignature() + " Calls: " + outEdges.next().getTgt());
+            }
+            System.out.println();
+            System.out.println();
         }
+
+
     }
 }

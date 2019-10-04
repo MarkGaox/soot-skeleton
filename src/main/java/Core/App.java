@@ -31,14 +31,10 @@ public class App {
         try {
             Map<String, String> all;
             Yaml yaml = new Yaml();
-
-            File file = new File(PATH_TO_CONFIG_YAML);
-            all = yaml.loadAs(new FileInputStream(file), Map.class);
-
-            String apk = all.get("apk");
-            String javaClass = all.get("javaClass");
-            boolean analysisWithAPK = Boolean.parseBoolean(apk);
-            boolean analysisWithJavaClass = Boolean.parseBoolean(javaClass);
+            File fileConfig = new File(PATH_TO_CONFIG_YAML);
+            all = yaml.loadAs(new FileInputStream(fileConfig), Map.class);
+            boolean analysisWithAPK = Boolean.parseBoolean(all.get("apk"));
+            boolean analysisWithJavaClass = Boolean.parseBoolean(all.get("javaClass"));
 
             if (analysisWithAPK) {
 
@@ -50,10 +46,11 @@ public class App {
                 myLogger.info("Creating Inferred Soot Configuration for Java Class =========>");
 //                ExamplesInterpreting example = new ExamplesInterpreting();
 //                example.ExamplesInterpretation(PATH_TO_EXAMPLES_YAML);
+                Skeleton.main(all, PATH_TO_EXAMPLES_YAML);
 
             }
 
-            Skeleton.main(all);
+
 
 
         } catch (FileNotFoundException e) {
