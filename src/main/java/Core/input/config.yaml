@@ -3,6 +3,7 @@
 apk: "false"
 javaClass: "true"
 # Use it only for apk
-entryPoint: "<Need to be either empty or methods signiture>"
 pathToSource: "<Need path to be to the path to source (apk/jar/javaClass)>"
 outputPath: "<User prefered output path>"
+#Use for java source code file
+

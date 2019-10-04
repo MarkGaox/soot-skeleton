@@ -32,23 +32,13 @@ public class App {
             Map<String, String> all;
             Yaml yaml = new Yaml();
 
-
-
             File file = new File(PATH_TO_CONFIG_YAML);
             all = yaml.loadAs(new FileInputStream(file), Map.class);
 
             String apk = all.get("apk");
             String javaClass = all.get("javaClass");
-
             boolean analysisWithAPK = Boolean.parseBoolean(apk);
             boolean analysisWithJavaClass = Boolean.parseBoolean(javaClass);
-
-            String entryPoint = all.get("entryPoint");
-            String analysisAlgorithm =  all.get("analysisAlgorithm");
-            String pathToSource = all.get("pathToSource");
-            String outputType = all.get("outputType");
-            String outputPath = all.get("outputPath");
-
 
             if (analysisWithAPK) {
 
@@ -58,12 +48,12 @@ public class App {
                 //       which has outputs that can cover the given examples.
 
                 myLogger.info("Creating Inferred Soot Configuration for Java Class =========>");
-                ExamplesInterpreting example = new ExamplesInterpreting();
-                example.ExamplesInterpretation(PATH_TO_EXAMPLES_YAML);
+//                ExamplesInterpreting example = new ExamplesInterpreting();
+//                example.ExamplesInterpretation(PATH_TO_EXAMPLES_YAML);
 
             }
 
-            Skeleton.main(analysisAlgorithm, pathToSource,outputPath ,outputType , entryPoint);
+            Skeleton.main(all);
 
 
         } catch (FileNotFoundException e) {

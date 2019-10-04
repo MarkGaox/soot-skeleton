@@ -15,12 +15,12 @@ public class DemoClass
     }
 
     public DemoClass(int x)
-    {
-        // use this.x to refer to the instance variable x
-        // use x to refer to a local variable x (more specifically,
-        // method parameter x)
-        this.x = x;
-    }
+{
+    // use this.x to refer to the instance variable x
+    // use x to refer to a local variable x (more specifically,
+    // method parameter x)
+    this.x = x;
+}
 
     public DemoClass(DemoClass otherDemo)
     {
@@ -56,7 +56,7 @@ public class DemoClass
     // call various versions of overload() based on their 
     // list of parameters (aka function signatures)
     public void overloadTester() {
-        System.out.println("overloadTester:\n");
+       // System.out.println("overloadTester:\n");
 
         overload((byte)1);
         overload((short)1);
@@ -69,33 +69,31 @@ public class DemoClass
     }
     
     public void overload(byte b) {
-        System.out.println("byte");
     }    
     public void overload(short s) {
-        System.out.println("short");
     }    
     public void overload(int i) {
-        System.out.println("int");
+        //System.out.println("int");
     }
     public void overload(long l) {
-        System.out.println("long");
+    //    System.out.println("long");
     }
     public void overload(float f) {
-        System.out.println("float");
+      //  System.out.println("float");
     }
     public void overload(double d) {
-        System.out.println("double");
+        //System.out.println("double");
     }    
     public void overload(char c) {
-        System.out.println("char");
+       // System.out.println("char");
     }    
     public void overload(boolean b) {
-        System.out.println("boolean");
+       // System.out.println("boolean");
     }    
 
     public static void main(String[] args) {
         DemoClass dc = new DemoClass();
-        dc.overloadTester();
+       // dc.overloadTester();
     }
 }
 
