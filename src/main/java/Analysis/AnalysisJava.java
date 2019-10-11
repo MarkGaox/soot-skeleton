@@ -1,36 +1,31 @@
-package SootExample;
+package Analysis;
 
-import fj.data.Option;
 import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import soot.*;
 import soot.jimple.toolkits.callgraph.*;
 import soot.options.Options;
-import soot.jimple.InstanceInvokeExpr;
-import soot.jimple.Stmt;
-import soot.jimple.StringConstant;
 import soot.PackManager;
 import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
 
 
-public class Analysis {
-    //private static String jarPath = "android-platforms/android-28/android.jar";
-
-
-    public static void main(String[] args) {
+public class AnalysisJava {
+    public AnalysisJava(String targetDir,  HashMap<String, HashMap<String, HashSet<String>>> allClasses) {
         soot.G.reset();
         // getPartialFlowTest();
-       // analysisDemo();
-        testConfigSpace();
+        analysisDemo(targetDir, allClasses);
+        //testConfigSpace();
     }
 
-    public static void analysisDemo() {
+    public static void analysisDemo(String targetDir, HashMap<String, HashMap<String, HashSet<String>>> allClasses) {
         soot.G.reset();
-        Options.v().set_process_dir(Collections.singletonList("test-resource"));
+        Options.v().set_process_dir(Collections.singletonList(targetDir));
         Options.v().set_src_prec(Options.src_prec_java);
-        Options.v().set_soot_classpath("test-resource");
+        Options.v().set_soot_classpath(targetDir);
         Options.v().set_whole_program(true);
         Options.v().set_allow_phantom_refs(true);
         Options.v().set_verbose(true);
@@ -46,18 +41,8 @@ public class Analysis {
         //      java code front and analysis APK.
         Scene.v().loadClassAndSupport("DemoClass");
         Scene.v().loadNecessaryClasses();
-        SootClass testClass = Scene.v().getSootClass("DemoClass");
-
 
         Options.v().setPhaseOption("cg.spark", "on");
-        List<SootClass> classes = Scene.v().getClasses(3);
-
-
-
-        for (SootClass sootClass : classes) {
-            System.out.println(sootClass.getName());
-        }
-
         PackManager.v().getPack("jtp").add(new Transform("jtp.myTransform", new BodyTransformer() {
             @Override
             protected void internalTransform(Body b, String phaseName, Map<String, String> options) {
@@ -77,28 +62,17 @@ public class Analysis {
                 System.out.println("Analysing indegrees and outdegrees for each methods in DemoClass");
                 CallGraph cg = Scene.v().getCallGraph();
                 for (SootMethod md2 : methodList) {
-                    System.out.println(md2.getSignature() + "has in degree: ");
-                    Iterator<Edge> indg = cg.edgesInto(md2);
-                    while(indg.hasNext()) {
-                        System.out.println(md2.getSignature() + "has in degree: " + indg.next());
+                    System.out.println(md2.getSignature() + " has in degree: ");
+                    Iterator<Edge> inDegree = cg.edgesInto(md2);
+                    while(inDegree.hasNext()) {
+                        System.out.print("    ");
+                        System.out.println(md2.getSignature() + " has in degree: " + inDegree.next());
                     }
 
-                    Iterator<Edge> outdg = cg.edgesOutOf(md2);
-                    while (outdg.hasNext()) {
-                        System.out.println(md2.getSignature() + "has out degree: " + outdg.next());
-                    }
-                }
-
-                for (Unit u : b.getUnits()) {
-                    Stmt s = (Stmt) u;
-
-                    // Call Graph Test
-
-
-                    Iterator<Edge> outEdges = cg.edgesOutOf(u);
-                    System.out.println("Trying to print the out edges");
-                    while (outEdges.hasNext()) {
-                        System.out.println(outEdges.next());
+                    Iterator<Edge> outDegree = cg.edgesOutOf(md2);
+                    while (outDegree.hasNext()) {
+                        System.out.print("    ");
+                        System.out.println(md2.getSignature() + "has out degree: " + outDegree.next());
                     }
                 }
             }
@@ -140,7 +114,5 @@ public class Analysis {
             System.out.println();
             System.out.println();
         }
-
-
     }
 }

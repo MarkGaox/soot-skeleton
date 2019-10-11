@@ -1,5 +1,6 @@
 package edu.washington.cs.skeleton;
 
+import Analysis.AnalysisJava;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
@@ -15,19 +16,15 @@ public class Skeleton {
 
         try {
             File fileExamples = new File(pathToExamples);
-
             InputStream inputStream = new FileInputStream(pathToExamples);
-
             Recipe exp = yaml.loadAs(inputStream, Recipe.class);
 
-            HashMap<String, HashSet<String>> demoClass = exp.getDemoClass();
-            Set<String> hashSet = demoClass.keySet();
-            for (String methods : hashSet) {
-                HashSet outEdges = demoClass.get(methods);
-                for (Object edge : outEdges) {
-                    System.out.println(edge);
-                }
-            }
+            // key set will be the names of classes, the corresponding HashMap is the
+            // the all reachable methods and its out degrees.
+            HashMap<String , HashMap<String, HashSet<String>>> demoClass = exp.getAllClasses();
+
+            // Convey current data to analysis.
+            AnalysisJava analysisJava = new AnalysisJava(pathToTargetDirectory, demoClass);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(-1);

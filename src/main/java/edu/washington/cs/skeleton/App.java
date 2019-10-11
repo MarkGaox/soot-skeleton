@@ -63,15 +63,17 @@ public class App {
                 // TODO: implement examples reading in and use the examples to generate a Soot configuration java file
                 //       which has outputs that can cover the given examples.
 
-                myLogger.info("Creating Inferred Soot Configuration for Java Class =========>");
+                myLogger.info("Creating Inferred Soot Configuration for Java Class.");
                 Skeleton.main(all, pathToExamples);
             }
-        } catch (FileNotFoundException e)
+        }
+        catch (FileNotFoundException e)
         {
             myLogger.info("Can't find config.yaml file within the path: " + pathToConfig + ".");
             e.printStackTrace();
             System.exit(-1);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
             System.exit(-1);

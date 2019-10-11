@@ -1,16 +1,17 @@
 
 # examples that users are looking forward to seeing inside the configuration
-demoClass:
-  "<DemoClass: void overloadTester()>":
-                                        ['<DemoClass: void overload(byte)>',
-                                        '<DemoClass: void overload(boolean)>',
-                                        '<DemoClass: void overload(char)>',
-                                        '<DemoClass: void overload(double)>',
-                                        '<DemoClass: void overload(float)>',
-                                         '<DemoClass: void overload(long)>',
-                                        '<DemoClass: void overload(int)>',
-                                        '<DemoClass: void overload(short)>']
-  "<DemoClass: void main(java.lang.String[])>":
-                                        ["<DemoClass: void <init>()>",
-                                        "<DemoClass: void i2()>",
-                                        "<DemoClass: void overloadTester()>"]
+allClasses:
+  demoClass:
+    "<DemoClass: void overloadTester()>":
+                                          ['<DemoClass: void overload(byte)>',
+                                          '<DemoClass: void overload(boolean)>',
+                                          '<DemoClass: void overload(char)>',
+                                          '<DemoClass: void overload(double)>',
+                                          '<DemoClass: void overload(float)>',
+                                           '<DemoClass: void overload(long)>',
+                                          '<DemoClass: void overload(int)>',
+                                          '<DemoClass: void overload(short)>']
+    "<DemoClass: void main(java.lang.String[])>":
+                                          ["<DemoClass: void <init>()>",
+                                          "<DemoClass: void i2()>",
+                                          "<DemoClass: void overloadTester()>"]

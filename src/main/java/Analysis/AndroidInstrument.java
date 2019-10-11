@@ -1,4 +1,4 @@
-package SootExample;
+package Analysis;
 
 import java.util.Iterator;
 import java.util.Map;

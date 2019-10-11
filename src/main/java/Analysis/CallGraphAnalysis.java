@@ -1,25 +1,10 @@
-package SootExample;
+package Analysis;
 
 import java.util.List;
 
-import fj.data.Option;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
-import soot.Body;
-import soot.BodyTransformer;
-import soot.Local;
-import soot.PackManager;
-import soot.PatchingChain;
-import soot.RefType;
 import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
-import soot.Transform;
-import soot.Unit;
-import soot.jimple.AbstractStmtSwitch;
-import soot.jimple.InvokeExpr;
-import soot.jimple.InvokeStmt;
-import soot.jimple.Jimple;
-import soot.jimple.StringConstant;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.options.Options;
 import soot.util.Chain;
