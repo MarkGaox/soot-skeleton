@@ -1,4 +1,4 @@
-package Core;
+package edu.washington.cs.skeleton;
 
 import java.util.Map;
 import javax.lang.model.element.Modifier;

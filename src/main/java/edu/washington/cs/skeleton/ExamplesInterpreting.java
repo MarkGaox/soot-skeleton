@@ -1,7 +1,5 @@
-package Core;
+package edu.washington.cs.skeleton;
 
-import org.yaml.snakeyaml.*;
-import sun.net.www.content.text.Generic;
 import Exception.InputException;
 
 import java.io.*;
