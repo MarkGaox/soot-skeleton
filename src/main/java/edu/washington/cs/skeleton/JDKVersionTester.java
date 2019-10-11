@@ -1,4 +1,4 @@
-package Core;
+package edu.washington.cs.skeleton;
 
 public class JDKVersionTester {
     private static final String javaVersion;

@@ -1,5 +1,4 @@
-package Core;
-
+package edu.washington.cs.skeleton;
 
 public class ExamplesMethod {
     private int modifier;
