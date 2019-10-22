@@ -6,5 +6,8 @@ Symlink the `android-platforms` folder (https://github.com/izgzhen/android-platf
 ```
 ln -s path/to/android-platforms test-resource
 ```
-
+Build up project:
+```
+make
+```
 For more resources, please check wiki.

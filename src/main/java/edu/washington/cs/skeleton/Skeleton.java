@@ -21,10 +21,10 @@ public class Skeleton {
 
             // key set will be the names of classes, the corresponding HashMap is the
             // the all reachable methods and its out degrees.
-            HashMap<String , HashMap<String, HashSet<String>>> demoClass = exp.getAllClasses();
+            Map<String , Map<String, Set<String>>> demoClass = exp.getAllClasses();
 
             // Convey current data to analysis.
-            AnalysisJava analysisJava = new AnalysisJava(pathToTargetDirectory, demoClass);
+            AnalysisJava analysisJava = new AnalysisJava(pathToTargetDirectory, demoClass, true, true, true, true, true);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(-1);

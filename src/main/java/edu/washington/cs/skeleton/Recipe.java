@@ -2,15 +2,17 @@ package edu.washington.cs.skeleton;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Recipe {
-    private HashMap<String , HashMap<String, HashSet<String>>>  allClasses;
+    private Map<String , Map<String, Set<String>>> allClasses;
 
-    public HashMap<String , HashMap<String, HashSet<String>>> getAllClasses() {
+    public Map<String , Map<String, Set<String>>> getAllClasses() {
         return allClasses;
     }
 
-    public void setAllClasses(HashMap<String , HashMap<String, HashSet<String>>> examples) {
+    public void setAllClasses(Map<String , Map<String, Set<String>>> examples) {
         this.allClasses = examples;
     }
 

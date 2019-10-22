@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 
 public class App {
     public static void main(String[] args) {
-        Logger myLogger = Logger.getLogger("soot-skeleton.skeleton.cs.washington.edu");
         Options options = new Options();
         Option cfg = new Option("cfg", "pathToConfig", true, "path to config.yaml");
         cfg.setRequired(true);
@@ -20,7 +19,6 @@ public class App {
         options.addOption(cfg);
         options.addOption(exp);
         if (args.length != 4) {
-            myLogger.info("Incorrect Input.");
             throw new IllegalArgumentException();
         }
 
@@ -62,14 +60,11 @@ public class App {
 
                 // TODO: implement examples reading in and use the examples to generate a Soot configuration java file
                 //       which has outputs that can cover the given examples.
-
-                myLogger.info("Creating Inferred Soot Configuration for Java Class.");
                 Skeleton.main(all, pathToExamples);
             }
         }
         catch (FileNotFoundException e)
         {
-            myLogger.info("Can't find config.yaml file within the path: " + pathToConfig + ".");
             e.printStackTrace();
             System.exit(-1);
         }

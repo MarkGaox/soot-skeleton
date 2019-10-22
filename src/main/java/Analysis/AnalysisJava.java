@@ -14,14 +14,15 @@ import soot.SootMethod;
 
 
 public class AnalysisJava {
-    public AnalysisJava(String targetDir,  HashMap<String, HashMap<String, HashSet<String>>> allClasses) {
+    public AnalysisJava(String targetDir, Map<String, Map<String, Set<String>>> allClasses, boolean wholeProgram,
+                        boolean allowPhantom, boolean verbose, boolean ignoreResolutionError, boolean noBodyExcluded) {
         soot.G.reset();
         // getPartialFlowTest();
-        analysisDemo(targetDir, allClasses);
-        //testConfigSpace();
+        //analysisDemo(targetDir, allClasses);
+        testConfigSpace(targetDir, allClasses);
     }
 
-    public static void analysisDemo(String targetDir, HashMap<String, HashMap<String, HashSet<String>>> allClasses) {
+    public static void analysisDemo(String targetDir, Map<String, Map<String, Set<String>>> allClasses) {
         soot.G.reset();
         Options.v().set_process_dir(Collections.singletonList(targetDir));
         Options.v().set_src_prec(Options.src_prec_java);
@@ -81,24 +82,24 @@ public class AnalysisJava {
     }
 
 
-    public static void testConfigSpace() {
+    public static void testConfigSpace(String targetDir, Map<String, Map<String, Set<String>>> allClasses) {
         soot.G.reset();
-        Options.v().set_process_dir(Collections.singletonList("test-resource"));
+        Options.v().set_process_dir(Collections.singletonList(targetDir));
         Options.v().set_src_prec(Options.src_prec_java);
-        Options.v().set_soot_classpath("test-resource");
+        Options.v().set_soot_classpath(targetDir);
         Options.v().set_whole_program(true);
         Options.v().set_allow_phantom_refs(true);
 
 
-//        Options.v().set_ignore_resolution_errors(true);
+        Options.v().set_ignore_resolution_errors(true);
         Options.v().set_no_bodies_for_excluded(true);
         Options.v().set_verbose(true);
-//        Scene.v().addBasicClass("DemoClass", SootClass.SIGNATURES);
+        Scene.v().addBasicClass("DemoClass", SootClass.SIGNATURES);
         Scene.v().loadClassAndSupport("DemoClass");
         Scene.v().loadNecessaryClasses();
         SootClass testClass = Scene.v().getSootClass("DemoClass");
 
-//        Options.v().setPhaseOption("cg.spark", "on");
+        Options.v().setPhaseOption("cg.spark", "on");
  //       Pack pk = PackManager.v().getPack("jtp");
         PackManager.v().runPacks();
         CallGraph cg = Scene.v().getCallGraph();
