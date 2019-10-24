@@ -6,8 +6,9 @@ import org.apache.commons.cli.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.io.FileNotFoundException;
+
+import Exception.JDKException;
 
 public class App {
     public static void main(String[] args) {
@@ -38,13 +39,11 @@ public class App {
         String pathToConfig = cmd.getOptionValue("pathToConfig");
         String pathToExamples = cmd.getOptionValue("pathToExamples");
 
-        /*
         JDKVersionTester versionTester = new JDKVersionTester();
-        if (!versionTester.isJava7()) {
-            myLogger.info("Using incompatible JDK version: " + versionTester.getJavaVersion() + ".");
-            throw new JDKException("JDK version is not 1.7.");
+        if (!versionTester.isJava8()) {
+            throw new JDKException("Incorrect JDK version: " + versionTester.getJavaVersion() + ". Please check again.");
         }
-         */
+
 
         try
         {
@@ -60,7 +59,7 @@ public class App {
 
                 // TODO: implement examples reading in and use the examples to generate a Soot configuration java file
                 //       which has outputs that can cover the given examples.
-                Skeleton.main(all, pathToExamples);
+                new Skeleton(all, pathToExamples);
             }
         }
         catch (FileNotFoundException e)

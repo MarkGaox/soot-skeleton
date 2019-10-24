@@ -1,7 +1,7 @@
 
 # examples that users are looking forward to seeing inside the configuration
 allClasses:
-  demoClass:
+  DemoClass:
     "<DemoClass: void overloadTester()>":
                                           ['<DemoClass: void overload(byte)>',
                                           '<DemoClass: void overload(boolean)>',

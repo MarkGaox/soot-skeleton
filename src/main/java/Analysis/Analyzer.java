@@ -13,16 +13,17 @@ import soot.SootClass;
 import soot.SootMethod;
 
 
-public class AnalysisJava {
-    public AnalysisJava(String targetDir, Map<String, Map<String, Set<String>>> allClasses, boolean wholeProgram,
-                        boolean allowPhantom, boolean verbose, boolean ignoreResolutionError, boolean noBodyExcluded) {
+public class Analyzer {
+    public static Map<String, Set<String>> callGraph;
+
+    public Analyzer(String pathToTargetDirectory, String target, boolean wholeProgram, boolean allowPhantom,
+                    boolean verbose, boolean ignoreResolutionError, boolean noBodyExcluded) {
         soot.G.reset();
-        // getPartialFlowTest();
-        //analysisDemo(targetDir, allClasses);
-        testConfigSpace(targetDir, allClasses);
+        // analysisDemo(pathToTargetDirectory, target);
+        testConfigSpace(pathToTargetDirectory, target, wholeProgram, allowPhantom, verbose, ignoreResolutionError, noBodyExcluded);
     }
 
-    public static void analysisDemo(String targetDir, Map<String, Map<String, Set<String>>> allClasses) {
+    public void analysisDemo(String targetDir, String target) {
         soot.G.reset();
         Options.v().set_process_dir(Collections.singletonList(targetDir));
         Options.v().set_src_prec(Options.src_prec_java);
@@ -82,27 +83,61 @@ public class AnalysisJava {
     }
 
 
-    public static void testConfigSpace(String targetDir, Map<String, Map<String, Set<String>>> allClasses) {
+    public void testConfigSpace(String pathToTargetDirectory, String target, boolean wholeProgram,
+                                boolean allowPhantom, boolean verbose, boolean ignoreResolutionError,
+                                boolean noBodyExcluded) {
         soot.G.reset();
-        Options.v().set_process_dir(Collections.singletonList(targetDir));
+        Options.v().set_process_dir(Collections.singletonList(pathToTargetDirectory));
         Options.v().set_src_prec(Options.src_prec_java);
-        Options.v().set_soot_classpath(targetDir);
-        Options.v().set_whole_program(true);
-        Options.v().set_allow_phantom_refs(true);
+        Options.v().set_soot_classpath(pathToTargetDirectory);
+        Options.v().set_whole_program(wholeProgram);
+        Options.v().set_allow_phantom_refs(allowPhantom);
+
+        Options.v().set_ignore_resolution_errors(ignoreResolutionError);
+        Options.v().set_no_bodies_for_excluded(noBodyExcluded);
+        Options.v().set_verbose(verbose);
 
 
-        Options.v().set_ignore_resolution_errors(true);
-        Options.v().set_no_bodies_for_excluded(true);
-        Options.v().set_verbose(true);
-        Scene.v().addBasicClass("DemoClass", SootClass.SIGNATURES);
-        Scene.v().loadClassAndSupport("DemoClass");
+        Scene.v().addBasicClass(target, SootClass.SIGNATURES);
+        Scene.v().loadClassAndSupport(target);
+
         Scene.v().loadNecessaryClasses();
-        SootClass testClass = Scene.v().getSootClass("DemoClass");
-
         Options.v().setPhaseOption("cg.spark", "on");
- //       Pack pk = PackManager.v().getPack("jtp");
+        //Pack pk = PackManager.v().getPack("jtp");
         PackManager.v().runPacks();
+
+        SootClass testClass = Scene.v().getSootClass(target);
         CallGraph cg = Scene.v().getCallGraph();
+        parseOutput(testClass, cg);
+    }
+
+    public Map<String, Set<String>> getCallGraph(){
+        return this.callGraph;
+    }
+
+    private void parseOutput(SootClass testClass, CallGraph cg) {
+        this.callGraph = new HashMap<String, Set<String>>();
+
+        List<SootMethod> allMethods = testClass.getMethods();
+        for (SootMethod md : allMethods) {
+            String sig = md.getSignature();
+            System.out.println("Parsing: " + sig +" ------------------------------->");
+
+            if (callGraph.get(sig) == null) {
+                this.callGraph.put(sig, new HashSet<String>());
+            }
+
+            Iterator<Edge> outEdges = cg.edgesOutOf(md);
+            Set<String> outDegrees = this.callGraph.get(sig);
+            while (outEdges.hasNext()) {
+                outDegrees.add(outEdges.next().getTgt().toString());
+            }
+        }
+    }
+
+    private void printOutEdgeOfTarget(SootClass testClass, CallGraph cg) {
+        this.callGraph = new HashMap<String, Set<String>>();
+
         List<SootMethod> allMethods = testClass.getMethods();
         for (SootMethod md : allMethods) {
             System.out.println(md);
@@ -116,4 +151,5 @@ public class AnalysisJava {
             System.out.println();
         }
     }
+
 }
