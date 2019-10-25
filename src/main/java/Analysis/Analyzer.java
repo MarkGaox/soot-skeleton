@@ -14,7 +14,7 @@ import soot.SootMethod;
 
 
 public class Analyzer {
-    public static Map<String, Set<String>> callGraph;
+    private Map<String, Set<String>> callGraph;
 
     public Analyzer(String pathToTargetDirectory, String target, boolean wholeProgram, boolean allowPhantom,
                     boolean verbose, boolean ignoreResolutionError, boolean noBodyExcluded) {
@@ -121,7 +121,7 @@ public class Analyzer {
         List<SootMethod> allMethods = testClass.getMethods();
         for (SootMethod md : allMethods) {
             String sig = md.getSignature();
-            System.out.println("Parsing: " + sig +" ------------------------------->");
+            System.out.println("Parsing: " + sig);
 
             if (callGraph.get(sig) == null) {
                 this.callGraph.put(sig, new HashSet<String>());
