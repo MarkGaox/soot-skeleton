@@ -56,8 +56,8 @@ public class DemoClass
     // call various versions of overload() based on their 
     // list of parameters (aka function signatures)
     public void overloadTester() {
-       // System.out.println("overloadTester:\n");
-
+        String a = "abc";
+        System.out.println(a);  // error at here
         overload((byte)1);
         overload((short)1);
         overload(1);

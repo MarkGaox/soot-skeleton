@@ -89,7 +89,7 @@ public class Analyzer {
         soot.G.reset();
         Options.v().set_process_dir(Collections.singletonList(pathToTargetDirectory));
         Options.v().set_src_prec(Options.src_prec_java);
-        Options.v().set_soot_classpath(pathToTargetDirectory);
+        Options.v().set_soot_classpath(pathToTargetDirectory + ":lib/rt.jar");
         Options.v().set_whole_program(wholeProgram);
         Options.v().set_allow_phantom_refs(allowPhantom);
 
