@@ -1,6 +1,8 @@
 all:
-	javac test-resource/DemoClass.java
 	mvn install
 
-test:
+test-resource/%.class: test-resource/%.java
+	javac $^
+
+test: test-resource/DemoClass.class
 	mvn -Dtest=AppTest test
