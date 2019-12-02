@@ -56,9 +56,6 @@ public class App {
             if (analysisWithAPK) {
 
             } else if (analysisWithJavaClass) {
-
-                // TODO: implement examples reading in and use the examples to generate a Soot configuration java file
-                //       which has outputs that can cover the given examples.
                 new Skeleton(all, pathToExamples);
             }
         }
