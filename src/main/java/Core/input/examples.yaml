@@ -15,4 +15,3 @@ allClasses:
                                           ["<DemoClass: void <init>()>",
                                           "<DemoClass: void i2()>",
                                           "<DemoClass: void overloadTester()>"]
-  Test:

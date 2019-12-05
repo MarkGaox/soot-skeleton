@@ -92,7 +92,7 @@ public class Skeleton {
         if (exp.getStatement() == null || exp.getStatement().size() == 0) {
             defaultIFDSConfigTraverse(pathToTargetDirectory, targetClassName);
         } else {
-            IFDSEnumerationTraverse(pathToExamples, targetClassName, exp);
+            IFDSEnumerationTraverse(pathToTargetDirectory, targetClassName, exp);
         }
     }
 
@@ -104,9 +104,9 @@ public class Skeleton {
 
         boolean result = ValidateIFDS(exp, ifdsAnalysis);
         if (!result) {
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>> FAILED ON GENERATE CORRECT STATEMENT");
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FAILED ON GENERATE CORRECT STATEMENT");
         } else {
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED STATEMENT");
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED STATEMENT");
         }
     }
 
@@ -143,7 +143,7 @@ public class Skeleton {
                 this.ifdsOptions.CG_Cha_Enabled.getValue(), this.ifdsOptions.CG_Spark_Enabled.getValue(), this.ifdsOptions.CG_Spark_Verbose.getValue(),
                 this.ifdsOptions.CG_Spark_OnFlyCg.getValue());
 
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED OUTPUT");
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED OUTPUT");
     }
 
 
@@ -173,9 +173,9 @@ public class Skeleton {
                 this.config.NOBODY_EXCLUDED.getValue());
         boolean result = validateOutput(analyzer, target);
         if (!result) {
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>> FAILED ON GENERATE CORRECT OUTPUT");
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FAILED ON GENERATE CORRECT OUTPUT");
         } else {
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED OUTPUT");
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED OUTPUT");
         }
     }
 
