@@ -1,3 +1,2 @@
-Relation: "Reaching Definition"
-Method: ""
-Statement: ""
+statement: ["virtualinvoke r0.<DemoClass: void overload(long)>(1L)",
+            "virtualinvoke r0.<DemoClass: void overload(float)>(1.0F)"]

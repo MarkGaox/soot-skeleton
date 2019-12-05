@@ -57,7 +57,11 @@ public class DemoClass
     // list of parameters (aka function signatures)
     public void overloadTester() {
         String a = "abc";
-        System.out.println(a);  // error at here
+        String x = "";
+        if (x.equals("")) {
+            a = "cba";
+        }
+        System.out.println(a);
         overload((byte)1);
         overload((short)1);
         overload(1);

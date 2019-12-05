@@ -54,7 +54,7 @@ public class App {
             boolean analysisWithAPK = Boolean.parseBoolean(all.get("apk"));
             boolean analysisWithJavaClass = Boolean.parseBoolean(all.get("javaClass"));
             if (analysisWithAPK) {
-
+                // TODO: Generalize into APK
             } else if (analysisWithJavaClass) {
                 new Skeleton(all, pathToExamples);
             }
