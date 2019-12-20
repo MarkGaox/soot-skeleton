@@ -32,7 +32,7 @@ public class ReachingDefAnalysis {
                                            boolean allowPhantomRef, boolean CGSafeNewInstance, boolean CGChaEnabled,
                                            boolean CGSparkEnabled, boolean CGSparkVerbose, boolean CGSparkOnFlyCg) {
         // Set Soot's internal classpath
-        Options.v().set_soot_classpath(classpath);
+        Options.v().set_soot_classpath(classpath + ":lib/rt.jar");
 
         // Enable whole-program mode
         Options.v().set_whole_program(wholeProgram);
