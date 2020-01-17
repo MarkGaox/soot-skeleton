@@ -8,4 +8,4 @@ className: "DemoClass"
 methodName: "overloadTester"
 # True for call graph, false for reaching def
 CallGraphOrReachingDef: "true"
-outputPath: "<User prefered output path>"
+outputPath: "result2.yaml"

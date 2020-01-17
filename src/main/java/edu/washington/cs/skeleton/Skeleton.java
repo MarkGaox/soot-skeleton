@@ -6,22 +6,23 @@ import edu.washington.cs.skeleton.Util.*;
 
 import org.yaml.snakeyaml.Yaml;
 
-
-
 import java.io.*;
 import java.util.*;
 import java.util.Map;
+import java.lang.System.*;
 
 
 public class Skeleton {
     private Map<String , Map<String, Set<String>>> allClasses;
     private String pathToTargetDirectory;
+    private String outputPath;
     private edu.washington.cs.skeleton.Util.CallGraphOptions config;
     private IFDSOptions ifdsOptions;
 
     public Skeleton(Map<String, String> userData, String pathToExamples) {
         String CallGraphOrReachingDef = userData.get("CallGraphOrReachingDef");
         this.pathToTargetDirectory = userData.get("pathToTargetDirectory");
+        this.outputPath = userData.get("outputPath");
 
         boolean relation = Boolean.parseBoolean(CallGraphOrReachingDef);
         // According to user config data, decide whether to analysis call graph or IFDS
@@ -36,13 +37,11 @@ public class Skeleton {
      * Load as CallGraph input
      */
     public void TargetCallGraph(Map<String, String> userConfig, String pathToExamples) {
-
-
         Yaml yaml = new Yaml();
-        Recipe exp = null;
+        CallGraphExampleParser exp = null;
         try {
             InputStream inputStream = new FileInputStream(pathToExamples);
-            exp = yaml.loadAs(inputStream, Recipe.class);
+            exp = yaml.loadAs(inputStream, CallGraphExampleParser.class);
 
             if (exp == null) {
                 throw new FileNotFoundException();
@@ -72,8 +71,6 @@ public class Skeleton {
     }
 
     public void TargetIFDS(Map<String, String> userConfig, String pathToExamples) {
-
-
         Yaml yaml = new Yaml();
         IFDSExampleParser exp = null;
         try
@@ -116,6 +113,7 @@ public class Skeleton {
         } else {
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED STATEMENT");
         }
+        System.out.println();
     }
 
 
@@ -149,6 +147,7 @@ public class Skeleton {
         if (!found) {
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FAILED TO FIND CONFIGURATION");
         } else {
+            generatConfig("ifds");
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED OUTPUT");
         }
     }
@@ -195,10 +194,57 @@ public class Skeleton {
     }
 
 
+    /**
+     * this method will generate the Soot Configuration into a yaml file which is called config.yaml
+     * @param mode
+     */
+    public void generatConfig(String mode) {
+        if (mode.equals("ifds")) {
+            ResultConfig res = new ResultConfig();
+            Map<String, Boolean> config = new HashMap<String, Boolean>();
+            for (IFDSOptions x : ifdsOptions.values()) {
+                config.put(x.name(), x.getValue());
+            }
+            res.setResult(config);
 
+            try {
+                FileWriter writer = new FileWriter(this.outputPath);
+                Yaml yaml = new Yaml();
+                yaml.dump(res, writer);
+            } catch (IOException e) {
+                System.out.println("Output File Path Not Found");
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        } else {
+            ResultConfig res = new ResultConfig();
+            Map<String, Boolean> config = new HashMap<String, Boolean>();
+            for (CallGraphOptions x : this.config.values()) {
+                config.put(x.name(), x.getValue());
+            }
+            res.setResult(config);
+            try {
+                FileWriter writer = new FileWriter(this.outputPath);
+                Yaml yaml = new Yaml();
+                yaml.dump(res, writer);
+            } catch (IOException e) {
+                System.out.println("Output File Path Not Found");
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }
+    }
 
-
-
+    public void WriteResult(String content)
+            throws IOException {
+        File file = new File(this.outputPath);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        PrintWriter writer = new PrintWriter(content);
+        writer.print(content);
+        writer.close();
+    }
 
 
 
@@ -280,6 +326,7 @@ public class Skeleton {
         if (!found) {
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FAILED TO FIND CONFIGURATION");
         } else {
+            generatConfig("callgraph");
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED OUTPUT");
         }
     }
