@@ -20,4 +20,5 @@ public enum IFDSOptions implements SootOptions{
     public void valueT() {  this.value = true;}
     public void opposite() {    this.value = !this.value;}
     public boolean getValue() {return this.value;}
+    public void setValue(boolean set) {this.value = set;}
 }

@@ -18,4 +18,5 @@ public enum CallGraphOptions implements SootOptions{
     public void valueT() {  this.value = true;}
     public void opposite() {    this.value = !this.value;}
     public boolean getValue() {return this.value;}
+    public void setValue(boolean config) {   this.value = config; }
 }

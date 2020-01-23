@@ -5,23 +5,27 @@ import org.apache.commons.cli.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.Map;
 import java.io.FileNotFoundException;
 
 import Exception.JDKException;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Options options = new Options();
         Option cfg = new Option("cfg", "pathToConfig", true, "path to config.yaml");
-        cfg.setRequired(true);
+        cfg.setArgs(1);
         Option exp = new Option("exp", "pathToExamples", true, "path to examples.yaml");
-        exp.setRequired(true);
+        exp.setArgs(1);
+        Option mode = new Option("r", "runnerMode", true, "This is the runner mode. " +
+                "There should be 2 seperate arguments. First one should be the file path to the " +
+                "The second argument should be the path of the generated result configuration");
+        // one for config.yaml path, one for result.yaml path
+        mode.setArgs(2);
         options.addOption(cfg);
         options.addOption(exp);
-        if (args.length != 4) {
-            throw new IllegalArgumentException();
-        }
+        options.addOption(mode);
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -38,12 +42,22 @@ public class App {
 
         String pathToConfig = cmd.getOptionValue("pathToConfig");
         String pathToExamples = cmd.getOptionValue("pathToExamples");
+        String[] runnerMode = cmd.getOptionValues("runnerMode");
 
+        // enter runner mod
+        if (runnerMode != null && runnerMode.length != 0) {
+            Map<String, String> all;  // uses to parse config.yaml
+            Yaml yaml = new Yaml();
+            File fileConfig = new File(runnerMode[0]);
+            all = yaml.loadAs(new FileInputStream(fileConfig), Map.class);
+            Runner run = new Runner();
+            run.runGivenConfig(all, Boolean.parseBoolean(all.get("CallGraphOrReachingDef")), runnerMode);
+            return;
+        }
         JDKVersionTester versionTester = new JDKVersionTester();
         if (!versionTester.isJava8()) {
             throw new JDKException("Incorrect JDK version: " + versionTester.getJavaVersion() + ". Please check again.");
         }
-
 
         try
         {
@@ -51,6 +65,11 @@ public class App {
             Yaml yaml = new Yaml();
             File fileConfig = new File(pathToConfig);
             all = yaml.loadAs(new FileInputStream(fileConfig), Map.class);
+
+            // Runner
+
+
+            // Generator
             boolean analysisWithAPK = Boolean.parseBoolean(all.get("apk"));
             boolean analysisWithJavaClass = Boolean.parseBoolean(all.get("javaClass"));
             if (analysisWithAPK) {

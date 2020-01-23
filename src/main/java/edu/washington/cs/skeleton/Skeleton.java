@@ -24,6 +24,8 @@ public class Skeleton {
         this.pathToTargetDirectory = userData.get("pathToTargetDirectory");
         this.outputPath = userData.get("outputPath");
 
+
+
         boolean relation = Boolean.parseBoolean(CallGraphOrReachingDef);
         // According to user config data, decide whether to analysis call graph or IFDS
         if (relation) {
