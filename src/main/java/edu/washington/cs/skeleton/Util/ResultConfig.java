@@ -6,7 +6,7 @@ public class ResultConfig {
     private Map<String, Boolean> result;
 
     public Map<String, Boolean> getResult() {
-        return result;
+        return this.result;
     }
 
     public void setResult(Map<String, Boolean> result) {

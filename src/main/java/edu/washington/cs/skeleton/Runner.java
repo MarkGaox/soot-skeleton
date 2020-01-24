@@ -27,7 +27,7 @@ public class Runner {
                 throw new FileNotFoundException();
             }
             // Convey current data to analysis.
-
+            System.out.println(exp.getResult().toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -41,28 +41,42 @@ public class Runner {
         }
     }
 
-    public void IFDSRun(ResultConfig exp, String pathToTargetDirectory, String targetClassName) {
-        Map<String, Boolean> result = exp.getResult();
-        for (CallGraphOptions options : cgconfig.values()) {
-            if (result.containsKey(options.name())) {
-                options.setValue(result.get(options.name()));
-            }
-        }
-        ReachingDefAnalysis ifdsAnalysis = new ReachingDefAnalysis(pathToTargetDirectory, targetClassName, this.ifdsOptions.WHOLE_PROGRAM.getValue(),
-                this.ifdsOptions.SET_APP.getValue(), this.ifdsOptions.ALLOW_PHANTOM_REF.getValue(), this.ifdsOptions.CG_Safe_New_Instance.getValue(),
-                this.ifdsOptions.CG_Cha_Enabled.getValue(), this.ifdsOptions.CG_Spark_Enabled.getValue(), this.ifdsOptions.CG_Spark_Verbose.getValue(),
-                this.ifdsOptions.CG_Spark_OnFlyCg.getValue());
-    }
-
     public void CGRun(ResultConfig exp, String pathToTargetDirectory, String targetClassName) {
         Map<String, Boolean> result = exp.getResult();
-        for (IFDSOptions options : ifdsOptions.values()) {
+        System.out.println("Start Call Graph Runner");
+        for (CallGraphOptions options : cgconfig.values()) {
             if (result.containsKey(options.name())) {
+                //System.out.println(options.name() + " : " + options.getValue());
                 options.setValue(result.get(options.name()));
+               // System.out.println(options.name() + " : " + options.getValue());
             }
         }
         Analyzer analyzer = new Analyzer(pathToTargetDirectory, targetClassName, this.cgconfig.WHOLE_PROGRAM.getValue(),
                 this.cgconfig.ALLOW_PHANTOM_REF.getValue(), this.cgconfig.VERBOSE.getValue(), this.cgconfig.IGNORE_RESOLUTION.getValue(),
                 this.cgconfig.NOBODY_EXCLUDED.getValue());
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Printing Result >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (String s : analyzer.getCallGraph().keySet()) {
+            System.out.println(s + " : " + analyzer.getCallGraph().get(s));
+        }
+    }
+
+    public void IFDSRun(ResultConfig exp, String pathToTargetDirectory, String targetClassName) {
+        Map<String, Boolean> result = exp.getResult();
+        System.out.println("Start IFDS Runner");
+        for (IFDSOptions options : ifdsOptions.values()) {
+            if (result.containsKey(options.name())) {
+                //System.out.println(options.name() + " : " + options.getValue());
+                options.setValue(result.get(options.name()));
+               // System.out.println(options.name() + " : " + options.getValue());
+            }
+        }
+        for (IFDSOptions options : ifdsOptions.values()) {
+            System.out.println(options.name() + " : " + options.getValue());
+        }
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Printing Result >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        ReachingDefAnalysis ifdsAnalysis = new ReachingDefAnalysis(pathToTargetDirectory, targetClassName, this.ifdsOptions.WHOLE_PROGRAM.getValue(),
+                this.ifdsOptions.SET_APP.getValue(), this.ifdsOptions.ALLOW_PHANTOM_REF.getValue(), this.ifdsOptions.CG_Safe_New_Instance.getValue(),
+                this.ifdsOptions.CG_Cha_Enabled.getValue(), this.ifdsOptions.CG_Spark_Enabled.getValue(), this.ifdsOptions.CG_Spark_Verbose.getValue(),
+                this.ifdsOptions.CG_Spark_OnFlyCg.getValue());
     }
 }

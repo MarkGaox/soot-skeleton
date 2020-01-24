@@ -158,14 +158,16 @@ public class Skeleton {
 
         if (index == options.size()) {
             // try false first, then true
-            boolean notFound = true;
             try {
                 ReachingDefAnalysis ifdsAnalysis = new ReachingDefAnalysis(this.pathToTargetDirectory, targetClassName, this.ifdsOptions.WHOLE_PROGRAM.getValue(),
                         this.ifdsOptions.SET_APP.getValue(), this.ifdsOptions.ALLOW_PHANTOM_REF.getValue(), this.ifdsOptions.CG_Safe_New_Instance.getValue(),
                         this.ifdsOptions.CG_Cha_Enabled.getValue(), this.ifdsOptions.CG_Spark_Enabled.getValue(), this.ifdsOptions.CG_Spark_Verbose.getValue(),
                         this.ifdsOptions.CG_Spark_OnFlyCg.getValue());
-                notFound = !ValidateIFDS(ifdsAnalysis, exp);
-                if (!notFound) {
+
+                if (ValidateIFDS(ifdsAnalysis, exp)) {
+                    for (IFDSOptions ifdsOptions : this.ifdsOptions.values()) {
+                        System.out.println(ifdsOptions.name() + " : " + ifdsOptions.getValue());
+                    }
                     return true;
                 }
             } catch (AssertionError e) {
@@ -189,10 +191,7 @@ public class Skeleton {
         }
         current.valueT();
         boolean search2 = searchForIFDSValidConfig(options, index + 1, targetClassName, exp);
-        if (search2) {
-            return true;
-        }
-        return false;
+        return search2;
     }
 
 
@@ -337,13 +336,14 @@ public class Skeleton {
 
         if (index == options.size()) {
             // try false first, then true
-            boolean notFound = true;
             try {
                 Analyzer analyzer = new Analyzer(this.pathToTargetDirectory, target, this.config.WHOLE_PROGRAM.getValue(),
                         this.config.ALLOW_PHANTOM_REF.getValue(), this.config.VERBOSE.getValue(), this.config.IGNORE_RESOLUTION.getValue(),
                         this.config.NOBODY_EXCLUDED.getValue());
-                notFound = !validateCGOutput(analyzer, target);
-                if (!notFound) {
+                if (validateCGOutput(analyzer, target)) {
+                    for (CallGraphOptions options1 : options) {
+                        System.out.println(options1.name() + " : " + options1.getValue());
+                    }
                     return true;
                 }
             } catch (AssertionError e) {
@@ -365,10 +365,7 @@ public class Skeleton {
         }
         current.valueT();
         boolean search2 = searchForCGValidConfig(options, index + 1, target);
-        if (search2) {
-            return true;
-        }
-        return false;
+        return search2;
     }
 
     /**

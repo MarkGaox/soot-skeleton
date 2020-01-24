@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 
 public class AppTest {
     @Test
-    public void CommandLineTest() throws FileNotFoundException {
+    public void CGTest() throws FileNotFoundException {
         App.main(new String[]{"-cfg", "src/main/java/Core/input/config.yaml", "-exp", "src/main/java/Core/input/examples.yaml"});
     }
 
