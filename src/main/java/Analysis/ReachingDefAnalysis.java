@@ -1,6 +1,8 @@
 package Analysis;
 
 import soot.Scene;
+import soot.jimple.toolkits.callgraph.CallGraph;
+import soot.jimple.toolkits.callgraph.Edge;
 import soot.options.Options;
 import soot.SootClass;
 import soot.*;
@@ -13,25 +15,27 @@ import soot.util.dot.DotGraph;
 import java.util.*;
 
 public class ReachingDefAnalysis {
-    Set<String> reachingResult;
+    private Set<String> reachingResult;
+    private Map<String, Set<String>> callGraph;
 
-    public static void main(String[] args) {
-        ReachingDefAnalysis x = new ReachingDefAnalysis("test-resource", "DemoClass", true, true,
-                true, true, false, true, true   , true);
-    }
-
-    public ReachingDefAnalysis(String classpath, String mainClass, boolean wholeProgram, boolean setApp,
+    public ReachingDefAnalysis(boolean callGraphOrReachingDef, String classpath, String mainClass, boolean wholeProgram, boolean setApp,
                                boolean allowPhantomRef, boolean CGSafeNewInstance, boolean CGChaEnabled,
-                               boolean CGSparkEnabled, boolean CGSparkVerbose, boolean CGSparkOnFlyCg) {
+                               boolean CGSparkEnabled, boolean CGSparkVerbose, boolean CGSparkOnFlyCg,
+                               boolean ignoreResolutionError, boolean noBodyExcluded, boolean verbose) {
         reachingResult = new HashSet<String>();
-        ReachingDefinitionAnalysis(classpath, mainClass, wholeProgram, setApp, allowPhantomRef, CGSafeNewInstance,
-                CGChaEnabled, CGSparkEnabled, CGSparkVerbose, CGSparkOnFlyCg);
+        reachingDefinitionAnalysis(callGraphOrReachingDef, classpath, mainClass, wholeProgram, setApp, allowPhantomRef, CGSafeNewInstance,
+                CGChaEnabled, CGSparkEnabled, CGSparkVerbose, CGSparkOnFlyCg, ignoreResolutionError, noBodyExcluded,
+                verbose);
     }
 
-    public void ReachingDefinitionAnalysis(String classpath, String mainClass, boolean wholeProgram, boolean setApp,
+    public void reachingDefinitionAnalysis(boolean callGraphOrReachingDef, String classpath, String mainClass, boolean wholeProgram, boolean setApp,
                                            boolean allowPhantomRef, boolean CGSafeNewInstance, boolean CGChaEnabled,
-                                           boolean CGSparkEnabled, boolean CGSparkVerbose, boolean CGSparkOnFlyCg) {
+                                           boolean CGSparkEnabled, boolean CGSparkVerbose, boolean CGSparkOnFlyCg,
+                                           boolean ignoreResolutionError, boolean noBodyExcluded, boolean verbose) {
+        soot.G.reset();
         // Set Soot's internal classpath
+        Options.v().set_process_dir(Collections.singletonList(classpath));
+        Options.v().set_src_prec(Options.src_prec_class);
         Options.v().set_soot_classpath(classpath + ":lib/rt.jar");
 
         // Enable whole-program mode
@@ -39,6 +43,7 @@ public class ReachingDefAnalysis {
         Options.v().set_app(setApp);
 
         // Call-graph options
+
         Options.v().setPhaseOption("cg", "safe-newinstance:" + CGSafeNewInstance);
         Options.v().setPhaseOption("cg.cha","enabled:" + CGChaEnabled);
 
@@ -47,11 +52,24 @@ public class ReachingDefAnalysis {
         Options.v().setPhaseOption("cg.spark","verbose:" + CGSparkVerbose);
         Options.v().setPhaseOption("cg.spark","on-fly-cg:" + CGSparkOnFlyCg);
 
+
         Options.v().set_allow_phantom_refs(allowPhantomRef);
+
+        Options.v().set_ignore_resolution_errors(ignoreResolutionError);
+        Options.v().set_no_bodies_for_excluded(noBodyExcluded);
+        Options.v().set_verbose(verbose);
 
         // Set the main class of the application to be analysed
         Options.v().set_main_class(mainClass);
 
+        if (callGraphOrReachingDef) {
+            runCGPack(mainClass);
+            return;
+        }
+        runIFDSPack(mainClass);
+    }
+
+    public void runIFDSPack(String mainClass) {
         // Load the main class
         SootClass c = Scene.v().loadClass(mainClass, SootClass.BODIES);
         c.setApplicationClass();
@@ -63,9 +81,6 @@ public class ReachingDefAnalysis {
         List<SootMethod> entryPoints = new ArrayList<SootMethod>();
         entryPoints.add(entryPoint);
         Scene.v().setEntryPoints(entryPoints);
-
-        // Run the package
-        final IFDSDataFlowTransformer transformer = new IFDSDataFlowTransformer();
 
         PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", new IFDSDataFlowTransformer()));
         PackManager.v().getPack("jtp").add(new Transform("jtp.myTransform", new BodyTransformer() {
@@ -105,7 +120,59 @@ public class ReachingDefAnalysis {
         PackManager.v().runPacks();
     }
 
+    public void runCGPack(String mainClass) {
+
+        Scene.v().addBasicClass(mainClass, SootClass.SIGNATURES);
+        Scene.v().loadClassAndSupport(mainClass);
+
+        Scene.v().loadNecessaryClasses();
+
+        //Pack pk = PackManager.v().getPack("jtp");
+        PackManager.v().runPacks();
+
+        SootClass testClass = Scene.v().getSootClass(mainClass);
+        CallGraph cg = Scene.v().getCallGraph();
+        parseOutput(testClass, cg);
+
+
+//
+//        SootClass c = Scene.v().loadClass(mainClass, SootClass.BODIES);
+//        c.setApplicationClass();
+//        Scene.v().loadClassAndSupport(mainClass);
+//
+//        Scene.v().loadNecessaryClasses();
+//        PackManager.v().runPacks();
+//
+//        SootClass testClass = Scene.v().getSootClass(mainClass);
+//        CallGraph cg = Scene.v().getCallGraph();
+//        parseOutput(testClass, cg);
+    }
+
+    private void parseOutput(SootClass testClass, CallGraph cg) {
+        this.callGraph = new HashMap<String, Set<String>>();
+
+        List<SootMethod> allMethods = testClass.getMethods();
+        for (SootMethod md : allMethods) {
+            String sig = md.getSignature();
+            System.out.println("Parsing: " + sig);
+
+            if (callGraph.get(sig) == null) {
+                this.callGraph.put(sig, new HashSet<String>());
+            }
+
+            Iterator<Edge> outEdges = cg.edgesOutOf(md);
+            Set<String> outDegrees = this.callGraph.get(sig);
+            while (outEdges.hasNext()) {
+                outDegrees.add(outEdges.next().getTgt().toString());
+            }
+        }
+    }
+
     public Set<String> getReachingResult() {
         return reachingResult;
+    }
+
+    public Map<String, Set<String>> getCallGraph() {
+        return callGraph;
     }
 }

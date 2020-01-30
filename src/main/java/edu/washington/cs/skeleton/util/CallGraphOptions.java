@@ -1,4 +1,4 @@
-package edu.washington.cs.skeleton.Util;
+package edu.washington.cs.skeleton.util;
 
 public enum CallGraphOptions implements SootOptions{
     // set default Options to true

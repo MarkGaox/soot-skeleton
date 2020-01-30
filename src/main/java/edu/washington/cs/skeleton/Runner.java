@@ -2,8 +2,7 @@ package edu.washington.cs.skeleton;
 
 import Analysis.Analyzer;
 import Analysis.ReachingDefAnalysis;
-import edu.washington.cs.skeleton.Util.*;
-import org.apache.commons.cli.CommandLine;
+import edu.washington.cs.skeleton.util.*;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
@@ -12,7 +11,7 @@ import java.io.InputStream;
 import java.util.*;
 
 public class Runner {
-    private edu.washington.cs.skeleton.Util.CallGraphOptions cgconfig;
+    private edu.washington.cs.skeleton.util.CallGraphOptions cgconfig;
     private IFDSOptions ifdsOptions;
 
     public void runGivenConfig(Map<String, String> config, boolean CallGraphOrReachingDef, String[] runnerMode) {
@@ -74,9 +73,10 @@ public class Runner {
             System.out.println(options.name() + " : " + options.getValue());
         }
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Printing Result >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        ReachingDefAnalysis ifdsAnalysis = new ReachingDefAnalysis(pathToTargetDirectory, targetClassName, this.ifdsOptions.WHOLE_PROGRAM.getValue(),
+        ReachingDefAnalysis ifdsAnalysis = new ReachingDefAnalysis(false, pathToTargetDirectory, targetClassName, this.ifdsOptions.WHOLE_PROGRAM.getValue(),
                 this.ifdsOptions.SET_APP.getValue(), this.ifdsOptions.ALLOW_PHANTOM_REF.getValue(), this.ifdsOptions.CG_Safe_New_Instance.getValue(),
                 this.ifdsOptions.CG_Cha_Enabled.getValue(), this.ifdsOptions.CG_Spark_Enabled.getValue(), this.ifdsOptions.CG_Spark_Verbose.getValue(),
-                this.ifdsOptions.CG_Spark_OnFlyCg.getValue());
+                this.ifdsOptions.CG_Spark_OnFlyCg.getValue(), this.ifdsOptions.IGNORE_RESOLUTION.getValue(), this.ifdsOptions.NOBODY_EXCLUDED.getValue(),
+                this.ifdsOptions.VERBOSE.getValue());
     }
 }

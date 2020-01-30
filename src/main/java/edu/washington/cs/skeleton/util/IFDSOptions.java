@@ -1,4 +1,4 @@
-package edu.washington.cs.skeleton.Util;
+package edu.washington.cs.skeleton.util;
 
 public enum IFDSOptions implements SootOptions{
     WHOLE_PROGRAM(true),
@@ -10,7 +10,10 @@ public enum IFDSOptions implements SootOptions{
     CG_Cha_Enabled(false),
     CG_Spark_Enabled(true),
     CG_Spark_Verbose(true),
-    CG_Spark_OnFlyCg(true);
+    CG_Spark_OnFlyCg(true),
+    IGNORE_RESOLUTION(true),
+    VERBOSE(true),
+    NOBODY_EXCLUDED(true);
 
     private boolean value;
 
