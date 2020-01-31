@@ -11,11 +11,9 @@ import java.io.InputStream;
 import java.util.*;
 
 public class Runner {
-    private SkeletonSootOptions skeletonSootOptions;
-
     public void runGivenConfig(Map<String, String> config, boolean callGraphOrReachingDef, String[] runnerMode) throws IOException {
         Yaml yaml = new Yaml();
-        ResultConfig exp = null;
+        ResultConfig exp;
         String loadPath = runnerMode[1];
         InputStream inputStream = new FileInputStream(loadPath);
         exp = yaml.loadAs(inputStream, ResultConfig.class);
@@ -34,19 +32,19 @@ public class Runner {
     public void run(ResultConfig exp, String pathToTargetDirectory, String targetClassName, boolean callGraphOrReachingDef) {
         Map<String, Boolean> result = exp.getResult();
         System.out.println("Start Runner");
-        for (SkeletonSootOptions options : skeletonSootOptions.values()) {
+        for (SkeletonSootOptions options : SkeletonSootOptions.values()) {
             if (result.containsKey(options.name())) {
                 options.setValue(result.get(options.name()));
             }
         }
-        for (SkeletonSootOptions options : skeletonSootOptions.values()) {
+        for (SkeletonSootOptions options : SkeletonSootOptions.values()) {
             System.out.println(options.name() + " : " + options.getValue());
         }
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Printing Result >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, pathToTargetDirectory, targetClassName, this.skeletonSootOptions.WHOLE_PROGRAM.getValue(),
-                this.skeletonSootOptions.SET_APP.getValue(), this.skeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), this.skeletonSootOptions.CG_Safe_New_Instance.getValue(),
-                this.skeletonSootOptions.CG_Cha_Enabled.getValue(), this.skeletonSootOptions.CG_Spark_Enabled.getValue(), this.skeletonSootOptions.CG_Spark_Verbose.getValue(),
-                this.skeletonSootOptions.CG_Spark_OnFlyCg.getValue(), this.skeletonSootOptions.IGNORE_RESOLUTION.getValue(), this.skeletonSootOptions.NOBODY_EXCLUDED.getValue(),
-                this.skeletonSootOptions.VERBOSE.getValue());
+        CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, pathToTargetDirectory, targetClassName, SkeletonSootOptions.WHOLE_PROGRAM.getValue(),
+                SkeletonSootOptions.SET_APP.getValue(), SkeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), SkeletonSootOptions.CG_Safe_New_Instance.getValue(),
+                SkeletonSootOptions.CG_Cha_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Verbose.getValue(),
+                SkeletonSootOptions.CG_Spark_OnFlyCg.getValue(), SkeletonSootOptions.IGNORE_RESOLUTION.getValue(), SkeletonSootOptions.NOBODY_EXCLUDED.getValue(),
+                SkeletonSootOptions.VERBOSE.getValue());
     }
 }

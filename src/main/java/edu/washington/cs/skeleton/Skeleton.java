@@ -14,7 +14,6 @@ public class Skeleton {
     private Map<String , Map<String, Set<String>>> allClasses;
     private String pathToTargetDirectory;
     private String outputPath;
-    private SkeletonSootOptions skeletonSootOptions;
 
     public Skeleton(Map<String, String> userData, String pathToExamples) throws IOException {
         // FIXME: CallGraphOrReachingDef should not be provided by user. This is a configuration must be inferred
@@ -32,6 +31,7 @@ public class Skeleton {
         IFDSExampleParser exp = null;
         CallGraphExampleParser exampleParser = null;
         InputStream inputStream = new FileInputStream(pathToExamples);
+        // loading the users' examples
         if (callGraphOrReachingDef) {
             exampleParser = yaml.loadAs(inputStream, CallGraphExampleParser.class);
         } else {
@@ -39,7 +39,9 @@ public class Skeleton {
         }
 
         String targetClassName = userConfig.get("className");
-        this.allClasses = exampleParser.getAllClasses();
+        if (exampleParser != null) {
+            this.allClasses = exampleParser.getAllClasses();
+        }
         if ((!callGraphOrReachingDef && (exp.getStatement() == null || exp.getStatement().size() == 0)) ||
         (callGraphOrReachingDef && (exampleParser.getAllClasses() == null || exampleParser.getAllClasses().size() == 0))) {
             defaultIFDSConfigTraverse(targetClassName, callGraphOrReachingDef);
@@ -49,18 +51,17 @@ public class Skeleton {
     }
 
     /**
-     *
      * Handle the case where users have no examples to contribute in the case of Callgraph
-     *
-     * @param
      * @param targetClassName
+     * @param callGraphOrReachingDef
+     * @throws IOException
      */
-    public void defaultIFDSConfigTraverse(String targetClassName, boolean callGraphOrReachingDef) throws IOException {
-        CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName, this.skeletonSootOptions.WHOLE_PROGRAM.getValue(),
-                this.skeletonSootOptions.SET_APP.getValue(), this.skeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), this.skeletonSootOptions.CG_Safe_New_Instance.getValue(),
-                this.skeletonSootOptions.CG_Cha_Enabled.getValue(), this.skeletonSootOptions.CG_Spark_Enabled.getValue(), this.skeletonSootOptions.CG_Spark_Verbose.getValue(),
-                this.skeletonSootOptions.CG_Spark_OnFlyCg.getValue(), this.skeletonSootOptions.IGNORE_RESOLUTION.getValue(), this.skeletonSootOptions.NOBODY_EXCLUDED.getValue(),
-                this.skeletonSootOptions.VERBOSE.getValue());
+    private void defaultIFDSConfigTraverse(String targetClassName, boolean callGraphOrReachingDef) throws IOException {
+        CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName, SkeletonSootOptions.WHOLE_PROGRAM.getValue(),
+                SkeletonSootOptions.SET_APP.getValue(), SkeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), SkeletonSootOptions.CG_Safe_New_Instance.getValue(),
+                SkeletonSootOptions.CG_Cha_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Verbose.getValue(),SkeletonSootOptions.CG_Spark_OnFlyCg.getValue(),
+                SkeletonSootOptions.IGNORE_RESOLUTION.getValue(), SkeletonSootOptions.NOBODY_EXCLUDED.getValue(),
+                SkeletonSootOptions.VERBOSE.getValue());
         generateConfig();
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED OUTPUT");
     }
@@ -74,13 +75,13 @@ public class Skeleton {
      * @param callGraphOrReachingDef
      * @throws IOException
      */
-    public void algorithmAnalysisFunction( String targetClassName, IFDSExampleParser exp, CallGraphExampleParser exampleParser,
+    private void algorithmAnalysisFunction( String targetClassName, IFDSExampleParser exp, CallGraphExampleParser exampleParser,
                                                boolean callGraphOrReachingDef) throws IOException {
         List<SkeletonSootOptions> options = new ArrayList<SkeletonSootOptions>();
-        for (SkeletonSootOptions skeletonSootOptions : this.skeletonSootOptions.values()) {
+        for (SkeletonSootOptions skeletonSootOptions : SkeletonSootOptions.values()) {
             options.add(skeletonSootOptions);
         }
-        boolean found = false ;
+        boolean found;
         if (callGraphOrReachingDef) {
             found = searchForCGValidConfig(options, 0, targetClassName, callGraphOrReachingDef);
         } else {
@@ -110,14 +111,14 @@ public class Skeleton {
         if (index == options.size()) {
             // try false first, then true
             try {
-                CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName, this.skeletonSootOptions.WHOLE_PROGRAM.getValue(),
-                        this.skeletonSootOptions.SET_APP.getValue(), this.skeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), this.skeletonSootOptions.CG_Safe_New_Instance.getValue(),
-                        this.skeletonSootOptions.CG_Cha_Enabled.getValue(), this.skeletonSootOptions.CG_Spark_Enabled.getValue(), this.skeletonSootOptions.CG_Spark_Verbose.getValue(),
-                        this.skeletonSootOptions.CG_Spark_OnFlyCg.getValue(), this.skeletonSootOptions.IGNORE_RESOLUTION.getValue(), this.skeletonSootOptions.NOBODY_EXCLUDED.getValue(),
-                        this.skeletonSootOptions.VERBOSE.getValue());
+                CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName, SkeletonSootOptions.WHOLE_PROGRAM.getValue(),
+                        SkeletonSootOptions.SET_APP.getValue(), SkeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), SkeletonSootOptions.CG_Safe_New_Instance.getValue(),
+                        SkeletonSootOptions.CG_Cha_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Verbose.getValue(),
+                        SkeletonSootOptions.CG_Spark_OnFlyCg.getValue(), SkeletonSootOptions.IGNORE_RESOLUTION.getValue(), SkeletonSootOptions.NOBODY_EXCLUDED.getValue(),
+                        SkeletonSootOptions.VERBOSE.getValue());
 
                 if (ValidateIFDS(coreSootAnalyzer, exp)) {
-                    for (SkeletonSootOptions skeletonSootOptions : this.skeletonSootOptions.values()) {
+                    for (SkeletonSootOptions skeletonSootOptions : SkeletonSootOptions.values()) {
                         System.out.println(skeletonSootOptions.name() + " : " + skeletonSootOptions.getValue());
                     }
                     return true;
@@ -146,10 +147,10 @@ public class Skeleton {
     /**
      * this method will generate the Soot Configuration into a yaml file which is called config.yaml
      */
-    public void generateConfig() throws IOException {
+    private void generateConfig() throws IOException {
         ResultConfig res = new ResultConfig();
         Map<String, Boolean> config = new HashMap<String, Boolean>();
-        for (SkeletonSootOptions x : skeletonSootOptions.values()) {
+        for (SkeletonSootOptions x : SkeletonSootOptions.values()) {
             config.put(x.name(), x.getValue());
         }
         res.setResult(config);
@@ -172,11 +173,11 @@ public class Skeleton {
         if (index == options.size()) {
             // try false first, then true
             try {
-                CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName, this.skeletonSootOptions.WHOLE_PROGRAM.getValue(),
-                        this.skeletonSootOptions.SET_APP.getValue(), this.skeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), this.skeletonSootOptions.CG_Safe_New_Instance.getValue(),
-                        this.skeletonSootOptions.CG_Cha_Enabled.getValue(), this.skeletonSootOptions.CG_Spark_Enabled.getValue(), this.skeletonSootOptions.CG_Spark_Verbose.getValue(),
-                        this.skeletonSootOptions.CG_Spark_OnFlyCg.getValue(), this.skeletonSootOptions.IGNORE_RESOLUTION.getValue(), this.skeletonSootOptions.NOBODY_EXCLUDED.getValue(),
-                        this.skeletonSootOptions.VERBOSE.getValue());
+                CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName, SkeletonSootOptions.WHOLE_PROGRAM.getValue(),
+                        SkeletonSootOptions.SET_APP.getValue(), SkeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), SkeletonSootOptions.CG_Safe_New_Instance.getValue(),
+                        SkeletonSootOptions.CG_Cha_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Verbose.getValue(),
+                        SkeletonSootOptions.CG_Spark_OnFlyCg.getValue(), SkeletonSootOptions.IGNORE_RESOLUTION.getValue(), SkeletonSootOptions.NOBODY_EXCLUDED.getValue(),
+                        SkeletonSootOptions.VERBOSE.getValue());
                 if (validateCGOutput(coreSootAnalyzer, targetClassName)) {
                     for (SkeletonSootOptions options1 : options) {
                         System.out.println(options1.name() + " : " + options1.getValue());
