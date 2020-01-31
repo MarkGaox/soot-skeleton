@@ -5,6 +5,7 @@ import org.apache.commons.cli.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import java.io.FileNotFoundException;
@@ -12,7 +13,7 @@ import java.io.FileNotFoundException;
 import Exception.JDKException;
 
 public class App {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
         Options options = new Options();
         Option cfg = new Option("cfg", "pathToConfig", true, "path to config.yaml");
         cfg.setArgs(1);
@@ -59,34 +60,21 @@ public class App {
             throw new JDKException("Incorrect JDK version: " + versionTester.getJavaVersion() + ". Please check again.");
         }
 
-        try
-        {
-            Map<String, String> all;  // uses to parse config.yaml
-            Yaml yaml = new Yaml();
-            File fileConfig = new File(pathToConfig);
-            all = yaml.loadAs(new FileInputStream(fileConfig), Map.class);
+        Map<String, String> all;  // uses to parse config.yaml
+        Yaml yaml = new Yaml();
+        File fileConfig = new File(pathToConfig);
+        all = yaml.loadAs(new FileInputStream(fileConfig), Map.class);
 
-            // Runner
+        // Runner
 
 
-            // Generator
-            boolean analysisWithAPK = Boolean.parseBoolean(all.get("apk"));
-            boolean analysisWithJavaClass = Boolean.parseBoolean(all.get("javaClass"));
-            if (analysisWithAPK) {
-                // TODO: Generalize into APK
-            } else if (analysisWithJavaClass) {
-                new Skeleton(all, pathToExamples);
-            }
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            System.exit(-1);
+        // Generator
+        boolean analysisWithAPK = Boolean.parseBoolean(all.get("apk"));
+        boolean analysisWithJavaClass = Boolean.parseBoolean(all.get("javaClass"));
+        if (analysisWithAPK) {
+            // TODO: Generalize into APK
+        } else if (analysisWithJavaClass) {
+            new Skeleton(all, pathToExamples);
         }
     }
 

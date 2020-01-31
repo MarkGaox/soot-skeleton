@@ -13,11 +13,11 @@ import soot.SootClass;
 import soot.SootMethod;
 
 
-public class Analyzer {
+public class AnalyzerConfigTry {
     private Map<String, Set<String>> callGraph;
 
-    public Analyzer(String pathToTargetDirectory, String target, boolean wholeProgram, boolean allowPhantom,
-                    boolean verbose, boolean ignoreResolutionError, boolean noBodyExcluded) {
+    public AnalyzerConfigTry(String pathToTargetDirectory, String target, boolean wholeProgram, boolean allowPhantom,
+                             boolean verbose, boolean ignoreResolutionError, boolean noBodyExcluded) {
         soot.G.reset();
         // analysisDemo(pathToTargetDirectory, target);
         testConfigSpace(pathToTargetDirectory, target, wholeProgram, allowPhantom, verbose, ignoreResolutionError, noBodyExcluded);

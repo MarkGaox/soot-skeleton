@@ -1,82 +1,52 @@
 package edu.washington.cs.skeleton;
 
-import Analysis.Analyzer;
-import Analysis.ReachingDefAnalysis;
+import Analysis.CoreSootAnalyzer;
 import edu.washington.cs.skeleton.util.*;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
 public class Runner {
-    private edu.washington.cs.skeleton.util.CallGraphOptions cgconfig;
-    private IFDSOptions ifdsOptions;
+    private SkeletonSootOptions skeletonSootOptions;
 
-    public void runGivenConfig(Map<String, String> config, boolean CallGraphOrReachingDef, String[] runnerMode) {
+    public void runGivenConfig(Map<String, String> config, boolean callGraphOrReachingDef, String[] runnerMode) throws IOException {
         Yaml yaml = new Yaml();
         ResultConfig exp = null;
-        try {
-            String loadPath = runnerMode[1];
-            InputStream inputStream = new FileInputStream(loadPath);
-            exp = yaml.loadAs(inputStream, ResultConfig.class);
+        String loadPath = runnerMode[1];
+        InputStream inputStream = new FileInputStream(loadPath);
+        exp = yaml.loadAs(inputStream, ResultConfig.class);
 
-            if (exp == null) {
-                throw new FileNotFoundException();
-            }
-            // Convey current data to analysis.
-            System.out.println(exp.getResult().toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.exit(-1);
+        if (exp == null) {
+            throw new FileNotFoundException();
         }
+        // Convey current data to analysis.
+        System.out.println(exp.getResult().toString());
+
         String pathToTargetDirectory = config.get("pathToTargetDirectory");
         String targetClassName = config.get("className");
-        if (!CallGraphOrReachingDef) {
-            IFDSRun(exp, pathToTargetDirectory, targetClassName);
-        } else {
-            CGRun(exp, pathToTargetDirectory, targetClassName);
-        }
+        run(exp, pathToTargetDirectory, targetClassName, callGraphOrReachingDef);
     }
 
-    public void CGRun(ResultConfig exp, String pathToTargetDirectory, String targetClassName) {
+    public void run(ResultConfig exp, String pathToTargetDirectory, String targetClassName, boolean callGraphOrReachingDef) {
         Map<String, Boolean> result = exp.getResult();
-        System.out.println("Start Call Graph Runner");
-        for (CallGraphOptions options : cgconfig.values()) {
+        System.out.println("Start Runner");
+        for (SkeletonSootOptions options : skeletonSootOptions.values()) {
             if (result.containsKey(options.name())) {
-                //System.out.println(options.name() + " : " + options.getValue());
                 options.setValue(result.get(options.name()));
-               // System.out.println(options.name() + " : " + options.getValue());
             }
         }
-        Analyzer analyzer = new Analyzer(pathToTargetDirectory, targetClassName, this.cgconfig.WHOLE_PROGRAM.getValue(),
-                this.cgconfig.ALLOW_PHANTOM_REF.getValue(), this.cgconfig.VERBOSE.getValue(), this.cgconfig.IGNORE_RESOLUTION.getValue(),
-                this.cgconfig.NOBODY_EXCLUDED.getValue());
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Printing Result >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        for (String s : analyzer.getCallGraph().keySet()) {
-            System.out.println(s + " : " + analyzer.getCallGraph().get(s));
-        }
-    }
-
-    public void IFDSRun(ResultConfig exp, String pathToTargetDirectory, String targetClassName) {
-        Map<String, Boolean> result = exp.getResult();
-        System.out.println("Start IFDS Runner");
-        for (IFDSOptions options : ifdsOptions.values()) {
-            if (result.containsKey(options.name())) {
-                //System.out.println(options.name() + " : " + options.getValue());
-                options.setValue(result.get(options.name()));
-               // System.out.println(options.name() + " : " + options.getValue());
-            }
-        }
-        for (IFDSOptions options : ifdsOptions.values()) {
+        for (SkeletonSootOptions options : skeletonSootOptions.values()) {
             System.out.println(options.name() + " : " + options.getValue());
         }
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Printing Result >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        ReachingDefAnalysis ifdsAnalysis = new ReachingDefAnalysis(false, pathToTargetDirectory, targetClassName, this.ifdsOptions.WHOLE_PROGRAM.getValue(),
-                this.ifdsOptions.SET_APP.getValue(), this.ifdsOptions.ALLOW_PHANTOM_REF.getValue(), this.ifdsOptions.CG_Safe_New_Instance.getValue(),
-                this.ifdsOptions.CG_Cha_Enabled.getValue(), this.ifdsOptions.CG_Spark_Enabled.getValue(), this.ifdsOptions.CG_Spark_Verbose.getValue(),
-                this.ifdsOptions.CG_Spark_OnFlyCg.getValue(), this.ifdsOptions.IGNORE_RESOLUTION.getValue(), this.ifdsOptions.NOBODY_EXCLUDED.getValue(),
-                this.ifdsOptions.VERBOSE.getValue());
+        CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, pathToTargetDirectory, targetClassName, this.skeletonSootOptions.WHOLE_PROGRAM.getValue(),
+                this.skeletonSootOptions.SET_APP.getValue(), this.skeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), this.skeletonSootOptions.CG_Safe_New_Instance.getValue(),
+                this.skeletonSootOptions.CG_Cha_Enabled.getValue(), this.skeletonSootOptions.CG_Spark_Enabled.getValue(), this.skeletonSootOptions.CG_Spark_Verbose.getValue(),
+                this.skeletonSootOptions.CG_Spark_OnFlyCg.getValue(), this.skeletonSootOptions.IGNORE_RESOLUTION.getValue(), this.skeletonSootOptions.NOBODY_EXCLUDED.getValue(),
+                this.skeletonSootOptions.VERBOSE.getValue());
     }
 }
