@@ -1,6 +1,6 @@
 package edu.washington.cs.skeleton;
 
-import Analysis.CoreSootAnalyzer;
+import edu.washington.cs.skeleton.analysis.CoreSootAnalyzer;
 import edu.washington.cs.skeleton.util.*;
 import org.yaml.snakeyaml.Yaml;
 

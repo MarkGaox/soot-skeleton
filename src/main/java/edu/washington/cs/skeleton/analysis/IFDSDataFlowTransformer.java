@@ -1,4 +1,4 @@
-package Analysis;
+package edu.washington.cs.skeleton.analysis;
 
 import heros.InterproceduralCFG;
 import heros.solver.IFDSSolver;
@@ -9,8 +9,6 @@ import soot.jimple.DefinitionStmt;
 import soot.toolkits.scalar.Pair;
 import soot.SceneTransformer;
 import soot.*;
-
-import Analysis.IFDSReachingDefinitions;
 
 
 import java.util.*;
@@ -25,7 +23,7 @@ public class IFDSDataFlowTransformer extends SceneTransformer {
         JimpleBasedInterproceduralCFG icfg= new JimpleBasedInterproceduralCFG();
 
         IFDSTabulationProblem<Unit, soot.toolkits.scalar.Pair<Value, Set<DefinitionStmt>>,
-                SootMethod, InterproceduralCFG<Unit, SootMethod>> problem = new Analysis.IFDSReachingDefinitions(icfg);
+                SootMethod, InterproceduralCFG<Unit, SootMethod>> problem = new edu.washington.cs.skeleton.analysis.IFDSReachingDefinitions(icfg);
 
         this.solver =
                 new IFDSSolver<Unit, Pair<Value, Set<DefinitionStmt>>, SootMethod,
