@@ -1,4 +1,4 @@
-package Analysis;
+package edu.washington.cs.skeleton.analysis;
 
 import java.util.*;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package Analysis;
+package edu.washington.cs.skeleton.analysis;
 
 import soot.Scene;
 import soot.jimple.toolkits.callgraph.CallGraph;

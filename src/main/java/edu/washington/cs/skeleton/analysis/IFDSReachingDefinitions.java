@@ -1,4 +1,4 @@
-package Analysis;
+package edu.washington.cs.skeleton.analysis;
 
 import heros.DefaultSeeds;
 import heros.FlowFunction;
