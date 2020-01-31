@@ -11,3 +11,16 @@ Build up project:
 make
 ```
 For more resources, please check wiki.
+
+## Example
+
+TODO: explain these configuration's content.
+
+```
+config.yaml
+configIFDS.yaml
+examples.yaml
+loadConfig.yaml
+loadConfigIFDS.yaml
+reaching.yaml
+```

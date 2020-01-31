@@ -1,7 +1,6 @@
 package edu.washington.cs.skeleton;
 
 import org.junit.Test;
-import edu.washington.cs.skeleton.App;
 
 import java.io.IOException;
 

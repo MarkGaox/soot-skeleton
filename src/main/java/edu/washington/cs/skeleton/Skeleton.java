@@ -17,6 +17,7 @@ public class Skeleton {
     private SkeletonSootOptions skeletonSootOptions;
 
     public Skeleton(Map<String, String> userData, String pathToExamples) throws IOException {
+        // FIXME: CallGraphOrReachingDef should not be provided by user. This is a configuration must be inferred
         String CallGraphOrReachingDef = userData.get("CallGraphOrReachingDef");
         this.pathToTargetDirectory = userData.get("pathToTargetDirectory");
         this.outputPath = userData.get("outputPath");
