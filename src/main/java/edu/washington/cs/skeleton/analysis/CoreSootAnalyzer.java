@@ -1,5 +1,6 @@
 package edu.washington.cs.skeleton.analysis;
 
+import edu.washington.cs.skeleton.util.SkeletonSootOptions;
 import soot.Scene;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.jimple.toolkits.callgraph.Edge;
@@ -15,14 +16,13 @@ public class CoreSootAnalyzer {
     private Set<String> reachingResult;
     private Map<String, Set<String>> callGraph;
 
-    public CoreSootAnalyzer(boolean callGraphOrReachingDef, String classpath, String mainClass, boolean wholeProgram, boolean setApp,
-                            boolean allowPhantomRef, boolean CGSafeNewInstance, boolean CGChaEnabled,
-                            boolean CGSparkEnabled, boolean CGSparkVerbose, boolean CGSparkOnFlyCg,
-                            boolean ignoreResolutionError, boolean noBodyExcluded, boolean verbose) {
+    public CoreSootAnalyzer(boolean callGraphOrReachingDef, String classpath, String mainClass) {
         reachingResult = new HashSet<String>();
-        reachingDefinitionAnalysis(callGraphOrReachingDef, classpath, mainClass, wholeProgram, setApp, allowPhantomRef, CGSafeNewInstance,
-                CGChaEnabled, CGSparkEnabled, CGSparkVerbose, CGSparkOnFlyCg, ignoreResolutionError, noBodyExcluded,
-                verbose);
+        reachingDefinitionAnalysis(callGraphOrReachingDef, classpath, mainClass, SkeletonSootOptions.WHOLE_PROGRAM.getValue(),
+                SkeletonSootOptions.SET_APP.getValue(), SkeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), SkeletonSootOptions.CG_Safe_New_Instance.getValue(),
+                SkeletonSootOptions.CG_Cha_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Verbose.getValue(),
+                SkeletonSootOptions.CG_Spark_OnFlyCg.getValue(), SkeletonSootOptions.IGNORE_RESOLUTION.getValue(), SkeletonSootOptions.NOBODY_EXCLUDED.getValue(),
+                SkeletonSootOptions.VERBOSE.getValue());
     }
 
     public void reachingDefinitionAnalysis(boolean callGraphOrReachingDef, String classpath, String mainClass, boolean wholeProgram, boolean setApp,

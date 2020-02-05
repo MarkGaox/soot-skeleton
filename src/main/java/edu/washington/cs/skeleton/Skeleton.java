@@ -57,11 +57,7 @@ public class Skeleton {
      * @throws IOException
      */
     private void defaultIFDSConfigTraverse(String targetClassName, boolean callGraphOrReachingDef) throws IOException {
-        CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName, SkeletonSootOptions.WHOLE_PROGRAM.getValue(),
-                SkeletonSootOptions.SET_APP.getValue(), SkeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), SkeletonSootOptions.CG_Safe_New_Instance.getValue(),
-                SkeletonSootOptions.CG_Cha_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Verbose.getValue(),SkeletonSootOptions.CG_Spark_OnFlyCg.getValue(),
-                SkeletonSootOptions.IGNORE_RESOLUTION.getValue(), SkeletonSootOptions.NOBODY_EXCLUDED.getValue(),
-                SkeletonSootOptions.VERBOSE.getValue());
+        CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName);
         generateConfig();
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED OUTPUT");
     }
@@ -95,6 +91,7 @@ public class Skeleton {
         }
     }
 
+    int total = 0;
     /**
      * Does the actual recursive searching
      * @param options
@@ -110,12 +107,10 @@ public class Skeleton {
                                              boolean callGraphOrReachingDef) throws AssertionError, RuntimeException {
         if (index == options.size()) {
             // try false first, then true
+            total += 1;
+            System.out.println("Tested " + total + " : " + Math.pow(2.0, 11.0));
             try {
-                CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName, SkeletonSootOptions.WHOLE_PROGRAM.getValue(),
-                        SkeletonSootOptions.SET_APP.getValue(), SkeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), SkeletonSootOptions.CG_Safe_New_Instance.getValue(),
-                        SkeletonSootOptions.CG_Cha_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Verbose.getValue(),
-                        SkeletonSootOptions.CG_Spark_OnFlyCg.getValue(), SkeletonSootOptions.IGNORE_RESOLUTION.getValue(), SkeletonSootOptions.NOBODY_EXCLUDED.getValue(),
-                        SkeletonSootOptions.VERBOSE.getValue());
+                CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName);
 
                 if (ValidateIFDS(coreSootAnalyzer, exp)) {
                     for (SkeletonSootOptions skeletonSootOptions : SkeletonSootOptions.values()) {
@@ -172,12 +167,10 @@ public class Skeleton {
                                            String targetClassName, boolean callGraphOrReachingDef) {
         if (index == options.size()) {
             // try false first, then true
+            total += 1;
+            System.out.println("Tested " + total + " : " + Math.pow(2.0, 11.0));
             try {
-                CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName, SkeletonSootOptions.WHOLE_PROGRAM.getValue(),
-                        SkeletonSootOptions.SET_APP.getValue(), SkeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), SkeletonSootOptions.CG_Safe_New_Instance.getValue(),
-                        SkeletonSootOptions.CG_Cha_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Verbose.getValue(),
-                        SkeletonSootOptions.CG_Spark_OnFlyCg.getValue(), SkeletonSootOptions.IGNORE_RESOLUTION.getValue(), SkeletonSootOptions.NOBODY_EXCLUDED.getValue(),
-                        SkeletonSootOptions.VERBOSE.getValue());
+                CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, this.pathToTargetDirectory, targetClassName);
                 if (validateCGOutput(coreSootAnalyzer, targetClassName)) {
                     for (SkeletonSootOptions options1 : options) {
                         System.out.println(options1.name() + " : " + options1.getValue());
