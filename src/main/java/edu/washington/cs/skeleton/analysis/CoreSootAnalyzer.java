@@ -138,6 +138,24 @@ public class CoreSootAnalyzer {
         }
     }
 
+    /**
+     * use for print the output
+     * @param cgOrIFDS : FIXME NEED TO ELIMINATE THIS PARAMETER
+     */
+    public void printOutput(boolean cgOrIFDS) {
+        Map<String, Set<String>> result;
+        if (cgOrIFDS) {
+            result = this.callGraph;
+        } else {
+            result = this.reachingResult;
+        }
+        for (String method : result.keySet()) {
+            System.out.println(method + " :");
+            for (String stmt : result.get(method)) {
+                System.out.println("    " + stmt);
+            }
+        }
+    }
 
     public Map<String, Set<String>> getReachingResult() {
         return reachingResult;

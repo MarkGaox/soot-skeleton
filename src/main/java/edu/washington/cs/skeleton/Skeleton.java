@@ -27,9 +27,9 @@ public class Skeleton {
 
     /**
      * This is a dummy implementation of inference of input
+     * TODO: Need to have a better inference
      * @return
      */
-
     private boolean inferTheInput() {
         for (String classes : allClasses.keySet()) {
             for (String methods : allClasses.get(classes).keySet()) {

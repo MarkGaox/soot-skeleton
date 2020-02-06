@@ -42,5 +42,6 @@ public class Runner {
         }
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Printing Result >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         CoreSootAnalyzer coreSootAnalyzer = new CoreSootAnalyzer(callGraphOrReachingDef, pathToTargetDirectory, targetClassName);
+        coreSootAnalyzer.printOutput(callGraphOrReachingDef);
     }
 }
