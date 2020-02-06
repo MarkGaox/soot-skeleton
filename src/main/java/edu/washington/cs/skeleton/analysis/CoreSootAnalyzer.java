@@ -1,5 +1,6 @@
 package edu.washington.cs.skeleton.analysis;
 
+import edu.washington.cs.skeleton.Skeleton;
 import edu.washington.cs.skeleton.util.SkeletonSootOptions;
 import soot.Scene;
 import soot.jimple.toolkits.callgraph.CallGraph;
@@ -13,11 +14,19 @@ import soot.jimple.Stmt;
 import java.util.*;
 
 public class CoreSootAnalyzer {
-    private Set<String> reachingResult;
+    // FIXME: factor out these two fields
+    private Map<String, Set<String>> reachingResult;
     private Map<String, Set<String>> callGraph;
 
+    public static void main(String[] args) {
+        SkeletonSootOptions.WHOLE_PROGRAM.setValue(true);
+        SkeletonSootOptions.ALLOW_PHANTOM_REF.setValue(true);
+        SkeletonSootOptions.CG_Cha_Enabled.setValue(true);
+        CoreSootAnalyzer x = new CoreSootAnalyzer(false, "test-resource", "DemoClass");
+    }
+
     public CoreSootAnalyzer(boolean callGraphOrReachingDef, String classpath, String mainClass) {
-        reachingResult = new HashSet<String>();
+        reachingResult = new HashMap<String, Set<String>>();
         reachingDefinitionAnalysis(callGraphOrReachingDef, classpath, mainClass, SkeletonSootOptions.WHOLE_PROGRAM.getValue(),
                 SkeletonSootOptions.SET_APP.getValue(), SkeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), SkeletonSootOptions.CG_Safe_New_Instance.getValue(),
                 SkeletonSootOptions.CG_Cha_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Verbose.getValue(),
@@ -80,34 +89,19 @@ public class CoreSootAnalyzer {
         PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", new IFDSDataFlowTransformer()));
         PackManager.v().getPack("jtp").add(new Transform("jtp.myTransform", new BodyTransformer() {
             @Override
-            protected void internalTransform(Body b, String phaseName, Map<String, String> options) {
-                String className = b.getMethod().getDeclaringClass().getName();
+            protected void internalTransform(Body b, String phaseName, Map<String, String> options) throws RuntimeException {
+                SootMethod current =  b.getMethod();
+                if (reachingResult.get(current.getSignature()) == null) {
+                    reachingResult.put(current.getSignature(), new HashSet<String>());
+                }
                 for (Unit u : b.getUnits()) {
                     Stmt s = (Stmt) u;
                     if (s.containsInvokeExpr() && s.getInvokeExpr() instanceof InstanceInvokeExpr) {
                         InstanceInvokeExpr e = (InstanceInvokeExpr) s.getInvokeExpr();
 
                         // find all invokeExpress in given configuration
-                        System.out.println(s.getInvokeExprBox().getValue().toString());
-                        reachingResult.add(s.getInvokeExprBox().getValue().toString());
-
-                        /*
-                        Only for test purpose
-
-                        if (e.getMethod().getName().equals("println") && className.equals("DemoClass")) {
-                            boolean equals = false;
-                            String constants = "[[other]]";
-                            for (Pair result : transformer.getSolver().ifdsResultsAt(u)) {
-                                if (result.getO1().equals(e.getArg(0))) {
-                                    System.out.println(result.getO2().toString());
-                                    String str = result.getO2().toString();
-                                    if (str.equals(constants)) {
-                                        equals = true;
-                                    }
-                                }
-                            }
-                        }
-                         */
+                        System.out.println(current.getSignature() + " : "+ s.getInvokeExprBox().getValue().toString());
+                        reachingResult.get(current.getSignature()).add(s.getInvokeExprBox().getValue().toString());
                     }
                 }
             }
@@ -144,7 +138,8 @@ public class CoreSootAnalyzer {
         }
     }
 
-    public Set<String> getReachingResult() {
+
+    public Map<String, Set<String>> getReachingResult() {
         return reachingResult;
     }
 
