@@ -1,6 +1,5 @@
 package edu.washington.cs.skeleton.analysis;
 
-import edu.washington.cs.skeleton.Skeleton;
 import edu.washington.cs.skeleton.util.SkeletonSootOptions;
 import soot.Scene;
 import soot.jimple.toolkits.callgraph.CallGraph;

@@ -5,5 +5,4 @@ javaClass: "true"
 # Use for java byte code file
 pathToTargetDirectory: "test-resource"
 className: "DemoClass"
-methodName: "overloadTester"
 outputPath: "result.yaml"

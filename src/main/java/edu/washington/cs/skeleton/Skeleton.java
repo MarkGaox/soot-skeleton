@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.*;
 import java.util.Map;
 
-
 public class Skeleton {
     private Map<String , Map<String, Set<String>>> allClasses;
     private String pathToTargetDirectory;
