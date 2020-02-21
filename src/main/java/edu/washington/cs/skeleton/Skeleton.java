@@ -42,7 +42,7 @@ public class Skeleton {
                         ifds++;
                     }
 
-                    // count with format
+                    // count by format
                     String methodDef = example[example.length - 1];
                     Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(methodDef);
                     while(m.find()) {
