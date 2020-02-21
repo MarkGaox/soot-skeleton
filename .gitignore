@@ -30,3 +30,6 @@ hs_err_pid*
 target
 
 android-platforms
+
+#ignore output
+output/
