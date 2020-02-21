@@ -8,6 +8,7 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.*;
 import java.util.*;
 import java.util.Map;
+import java.util.regex.*;
 
 public class Skeleton {
     private Map<String , Map<String, Set<String>>> allClasses;
@@ -28,25 +29,47 @@ public class Skeleton {
      * TODO: Need to have a better inference
      * @return
      */
-    private boolean inferTheInput() {
+    private double inferTheInput() {
+        double cg = 1;
+        double ifds = 1;
         for (String classes : allClasses.keySet()) {
             for (String methods : allClasses.get(classes).keySet()) {
                 Set<String> statements = new HashSet<String>( allClasses.get(classes).get(methods));
                 for (String stmt : statements) {
                     String[] example = stmt.split(" ");
-                    return !(example.length != 0 && (example[0].equals("virtualinvoke") || example[0].equals("specialinvoke")));
+                    // count the IFDS with key word
+                    if (example.length != 0 && (example[0].equals("virtualinvoke") || example[0].equals("specialinvoke"))) {
+                        ifds++;
+                    }
+
+                    // count with format
+                    String methodDef = example[example.length - 1];
+                    Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(methodDef);
+                    while(m.find()) {
+                        String param = m.group(1);
+                        if (testJavaType(param.toLowerCase())) {
+                            cg++;
+                        } else {
+                            ifds++;
+                        }
+                    }
                 }
             }
         }
         // NOT GOING TO GET HERE
-        return false;
+        return cg / (cg + ifds);
+    }
+
+    private boolean testJavaType(String param) {
+        return param.equals("byte") || param.equals("short") || param.equals("long") ||
+            param.equals("int") || param.equals("double") || param.equals("float") || param.equals("");
     }
 
     public void retrieveResult(Map<String, String> userConfig, String pathToExamples) throws IOException {
         Yaml yaml = new Yaml();
 
         InputStream inputStream = new FileInputStream(pathToExamples);
-        CallGraphExampleParser exampleParser = yaml.loadAs(inputStream, CallGraphExampleParser.class);;
+        CallGraphExampleParser exampleParser = yaml.loadAs(inputStream, CallGraphExampleParser.class);
         // loading the users' examples
 
         // Set up the allClasses
@@ -56,12 +79,12 @@ public class Skeleton {
         }
 
         // Infer the input type
-        this.callGraphOrReachingDef = inferTheInput();
+        double rateToBeCG = inferTheInput();
 
         if ((exampleParser.getAllClasses() == null || exampleParser.getAllClasses().size() == 0)) {
             defaultIFDSConfigTraverse(targetClassName);
         } else {
-            algorithmAnalysisFunction(targetClassName);
+            algorithmAnalysisFunction(targetClassName, rateToBeCG);
         }
     }
 
@@ -82,13 +105,30 @@ public class Skeleton {
      * @param targetClassName
      * @throws IOException
      */
-    private void algorithmAnalysisFunction( String targetClassName) throws IOException {
+    private void algorithmAnalysisFunction(String targetClassName, double rateToBeCG) throws IOException {
         List<SkeletonSootOptions> options = new ArrayList<SkeletonSootOptions>();
         for (SkeletonSootOptions skeletonSootOptions : SkeletonSootOptions.values()) {
             options.add(skeletonSootOptions);
         }
+        // infer the rate to be CG input
+        if (rateToBeCG >= 0.5) {
+            this.callGraphOrReachingDef = true;
+        } else {
+            this.callGraphOrReachingDef = false;
+        }
+
         boolean found = searchForConfig(options, 0, targetClassName);
         if (!found) {
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FAILED TO FIND CONFIGURATION");
+        } else {
+            generateConfig();
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FOUND THE DESIRED OUTPUT");
+            return;
+        }
+
+        this.callGraphOrReachingDef = !this.callGraphOrReachingDef;
+        boolean secondTurn = searchForConfig(options, 0, targetClassName);
+        if (!secondTurn) {
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>> FAILED TO FIND CONFIGURATION");
         } else {
             generateConfig();
