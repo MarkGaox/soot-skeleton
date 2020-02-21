@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.*;
 
 public class Runner {
-    public void runGivenConfig(Map<String, String> config, boolean callGraphOrReachingDef, String[] runnerMode) throws IOException {
+    public void runGivenConfig(Map<String, String> config, String[] runnerMode) throws IOException {
         Yaml yaml = new Yaml();
         ResultConfig exp;
         String loadPath = runnerMode[1];
@@ -26,6 +26,7 @@ public class Runner {
 
         String pathToTargetDirectory = config.get("pathToTargetDirectory");
         String targetClassName = config.get("className");
+        boolean callGraphOrReachingDef = exp.getResult().get("CG_OR_RF");
         run(exp, pathToTargetDirectory, targetClassName, callGraphOrReachingDef);
     }
 

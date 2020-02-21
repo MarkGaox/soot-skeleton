@@ -22,18 +22,10 @@ public class App {
                 "The second argument should be the path of the generated result configuration");
         // one for config.yaml path, one for result.yaml path
         mode.setArgs(2);
-
-        // Options for types of runner mode
-        Option cgType = new Option("cg", "runnerModeCG", false, "This is the " +
-                "option to choose whether you want to runner to run given input with call graphs or reaching definition");
-        Option rfType = new Option("rf", "runnerModeIFDS", false, "This is the " +
-                "option to choose whether you want to runner to run given input with call graphs or reaching definition");
-
         options.addOption(cfg);
         options.addOption(exp);
         options.addOption(mode);
-        options.addOption(cgType);
-        options.addOption(rfType);
+
 
         // Parse the commandline options
         CommandLineParser parser = new DefaultParser();
@@ -52,36 +44,15 @@ public class App {
         String pathToExamples = cmd.getOptionValue("pathToExamples");
         String[] runnerMode = cmd.getOptionValues("runnerMode");
 
-        Option[] cmdOptions = cmd.getOptions();
-        boolean runCG = false;
-        boolean runIFDS = false;
-        for (Option option : cmdOptions) {
-            if (option.getLongOpt().equals("runnerModeCG")) {
-                runCG = true;
-            } else if (option.getLongOpt().equals("runnerModeIFDS")) {
-                runIFDS = true;
-            }
-        }
-
         // enter runner mode
         if (runnerMode != null && runnerMode.length != 0) {
-            // check whether argument is in a correct form
-            if (runCG && runIFDS) {
-                System.out.println("Can't select call graph runner mode(-cg) and reaching definition runner mode(-rf) at same time");
-                throw new IllegalArgumentException();
-            }
-
-            if (!runCG && !runIFDS) {
-                System.out.println("Need to select at least one of call graph runner mode(-cg) and reaching definition runner mode(-rf)");
-                throw new IllegalArgumentException();
-            }
 
             Map<String, String> all;    // uses to parse config.yaml
             Yaml yaml = new Yaml();
             File fileConfig = new File(runnerMode[0]);
             all = yaml.loadAs(new FileInputStream(fileConfig), Map.class);
             Runner run = new Runner();
-            run.runGivenConfig(all, runCG, runnerMode);
+            run.runGivenConfig(all, runnerMode);
             return;
         }
         JDKVersionTester versionTester = new JDKVersionTester();
@@ -93,9 +64,6 @@ public class App {
         Yaml yaml = new Yaml();
         File fileConfig = new File(pathToConfig);
         all = yaml.loadAs(new FileInputStream(fileConfig), Map.class);
-
-        // Runner
-
 
         // Generator
         boolean analysisWithAPK = Boolean.parseBoolean(all.get("apk"));

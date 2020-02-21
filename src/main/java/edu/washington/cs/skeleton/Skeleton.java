@@ -16,7 +16,6 @@ public class Skeleton {
     private boolean callGraphOrReachingDef;
 
     public Skeleton(Map<String, String> userData, String pathToExamples) throws IOException {
-        // FIXME: CallGraphOrReachingDef should not be provided by user. This is a configuration must be inferred
         this.pathToTargetDirectory = userData.get("pathToTargetDirectory");
         this.outputPath = userData.get("outputPath");
         // According to user config data, decide whether to analysis call graph or IFDS
@@ -140,6 +139,7 @@ public class Skeleton {
         for (SkeletonSootOptions x : SkeletonSootOptions.values()) {
             config.put(x.name(), x.getValue());
         }
+        config.put("CG_OR_RF", this.callGraphOrReachingDef);
         res.setResult(config);
         FileWriter writer = new FileWriter(this.outputPath);
         Yaml yaml = new Yaml();
