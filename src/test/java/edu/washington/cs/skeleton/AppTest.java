@@ -24,7 +24,7 @@ public class AppTest {
     @Test
     public void IFDSRunnerTest() throws IOException {
         System.out.println("TESTING REACHING DEFINITION RUNNER");
-        App.main(new String[]{"-r", "src/test/resources/config/loadConfigIFDS.yaml", "result.yaml"});
+        App.main(new String[]{"-r", "src/test/resources/config/loadConfigIFDS.yaml", "src/test/resources/results/result.yaml"});
         System.out.println();
         System.out.println();
     }
@@ -32,7 +32,7 @@ public class AppTest {
     @Test
     public void CGRunnerTest() throws IOException {
         System.out.println("TESTING CALL GRAPH RUNNER");
-        App.main(new String[]{"-r", "src/test/resources/config/loadConfig.yaml", "result2.yaml"});
+        App.main(new String[]{"-r", "src/test/resources/config/loadConfig.yaml", "src/test/resources/results/result2.yaml"});
         System.out.println();
         System.out.println();
     }

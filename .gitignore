@@ -33,3 +33,9 @@ android-platforms
 
 #ignore output
 output/
+
+result*.yaml
+.classpath
+.factorypath
+.project
+.settings/
