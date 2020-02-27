@@ -37,7 +37,8 @@ public class Skeleton {
                 Set<String> statements = new HashSet<String>( allClasses.get(classes).get(methods));
                 for (String stmt : statements) {
                     String[] example = stmt.split(" ");
-                    // count the IFDS with key word
+                    // count the IFDS wi
+                    // th key word
                     if (example.length != 0 && (example[0].equals("virtualinvoke") || example[0].equals("specialinvoke"))) {
                         ifds++;
                     }
