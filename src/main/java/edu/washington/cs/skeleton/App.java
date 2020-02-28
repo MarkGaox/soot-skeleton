@@ -62,6 +62,7 @@ public class App {
 
         Map<String, String> all;  // uses to parse config.yaml
         Yaml yaml = new Yaml();
+        System.out.println(pathToConfig);
         File fileConfig = new File(pathToConfig);
         all = yaml.loadAs(new FileInputStream(fileConfig), Map.class);
 

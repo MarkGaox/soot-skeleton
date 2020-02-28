@@ -37,7 +37,8 @@ public class Skeleton {
                 Set<String> statements = new HashSet<String>( allClasses.get(classes).get(methods));
                 for (String stmt : statements) {
                     String[] example = stmt.split(" ");
-                    // count the IFDS with key word
+                    // count the IFDS wi
+                    // th key word
                     if (example.length != 0 && (example[0].equals("virtualinvoke") || example[0].equals("specialinvoke"))) {
                         ifds++;
                     }
@@ -156,13 +157,13 @@ public class Skeleton {
             return false;
         }
         SkeletonSootOptions current = options.get(index);
-        current.valueF();
+        current.valueT();
         boolean search1 = searchForConfig(options, index + 1, targetClassName);
         // found the corresponding result;
         if (search1) {
             return true;
         }
-        current.valueT();
+        current.valueF();
         boolean search2 = searchForConfig(options, index + 1, targetClassName);
         return search2;
     }
