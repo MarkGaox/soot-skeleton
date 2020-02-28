@@ -157,13 +157,13 @@ public class Skeleton {
             return false;
         }
         SkeletonSootOptions current = options.get(index);
-        current.valueF();
+        current.valueT();
         boolean search1 = searchForConfig(options, index + 1, targetClassName);
         // found the corresponding result;
         if (search1) {
             return true;
         }
-        current.valueT();
+        current.valueF();
         boolean search2 = searchForConfig(options, index + 1, targetClassName);
         return search2;
     }
