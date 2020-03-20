@@ -60,6 +60,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -75,10 +76,10 @@
         </dependency>
     </dependencies>
         <repositories>
+
         </repositories>
 
     <build>
-
         <plugins>
             <plugin>
                 <!-- Build an executable JAR -->
@@ -106,7 +107,6 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
             </plugin>
-
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.1</version>
