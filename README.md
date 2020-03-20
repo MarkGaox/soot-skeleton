@@ -14,6 +14,8 @@ ln -s path/to/android-platforms .
 Build the project and run tests:
 
 ```
+make test
+
 make
 ```
 
@@ -25,10 +27,10 @@ Examples of Using SootSkeleton
 
 ```bash
 # Usage of generator mode
-java -jar examples/soot-skeleton.jar -cfg src/test/resources/config/config.yaml -exp src/test/resources/config/examples.yaml
+java -jar target/soot-skeleton-1.0-SNAPSHOT-jar-with-dependencies.jar -cfg src/test/resources/config/config.yaml -exp src/test/resources/config/examples.yaml
 
 # Usage of runner mode
-java -jar examples/soot-skeleton.jar -r src/test/resources/config/loadConfigIFDS.yaml src/test/resources/results/result.yaml 
+java -jar target/soot-skeleton-1.0-SNAPSHOT-jar-with-dependencies.jar -r src/test/resources/config/loadConfigIFDS.yaml src/test/resources/results/result.yaml
 ```
 
 ### Command-line Options
