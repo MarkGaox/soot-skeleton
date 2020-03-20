@@ -16,6 +16,7 @@ public class CoreSootAnalyzer {
     // FIXME: factor out these two fields
     private Map<String, Set<String>> reachingResult;
     private Map<String, Set<String>> callGraph;
+    public int count;
 
     public static void main(String[] args) {
         SkeletonSootOptions.WHOLE_PROGRAM.setValue(true);
@@ -26,6 +27,7 @@ public class CoreSootAnalyzer {
 
     public CoreSootAnalyzer(boolean callGraphOrReachingDef, String classpath, String mainClass) {
         reachingResult = new HashMap<String, Set<String>>();
+        count = 0;
         reachingDefinitionAnalysis(callGraphOrReachingDef, classpath, mainClass, SkeletonSootOptions.WHOLE_PROGRAM.getValue(),
                 SkeletonSootOptions.SET_APP.getValue(), SkeletonSootOptions.ALLOW_PHANTOM_REF.getValue(), SkeletonSootOptions.CG_Safe_New_Instance.getValue(),
                 SkeletonSootOptions.CG_Cha_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Enabled.getValue(), SkeletonSootOptions.CG_Spark_Verbose.getValue(),
@@ -101,11 +103,13 @@ public class CoreSootAnalyzer {
                         // find all invokeExpress in given configuration
                         System.out.println(current.getSignature() + " : "+ s.getInvokeExprBox().getValue().toString());
                         reachingResult.get(current.getSignature()).add(s.getInvokeExprBox().getValue().toString());
+                        count++;
                     }
                 }
             }
         }));
         PackManager.v().runPacks();
+        System.out.println("Total Stmt: " + count);
     }
 
     public void runCGPack(String mainClass) {
