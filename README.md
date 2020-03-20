@@ -1,46 +1,72 @@
-# soot-skeleton
-Automatically enumerates some options in a Soot based on user determined example output and input and generates a starter script.
+# SootSkeleton
+
+Generate a static analyzer based on user-provided example input-output pairs.
+The analysis are implemented using Soot framework. See implementation for details on configuration inference algorithm.
+
+## Build
 
 Clone/Symlink the `android-platforms` folder (https://github.com/izgzhen/android-platforms):
 
 ```
 ln -s path/to/android-platforms .
 ```
-Build up project:
+
+Build the project and run tests:
+
 ```
+make test
+
 make
 ```
-For more resources, please check wiki.
 
-## Example
+For more resources, please check [wiki](https://github.com/MarkGaox/soot-skeleton/wiki).
 
-TODO: explain more about these configuration's content.
+## Usage
 
-### Commandline Options
+Examples of Using SootSkeleton
+
+```bash
+# Usage of generator mode
+java -jar target/soot-skeleton-1.0-SNAPSHOT-jar-with-dependencies.jar -cfg src/test/resources/config/config.yaml -exp src/test/resources/config/examples.yaml
+
+# Usage of runner mode
+java -jar target/soot-skeleton-1.0-SNAPSHOT-jar-with-dependencies.jar -r src/test/resources/config/loadConfigIFDS.yaml src/test/resources/results/result.yaml
 ```
+
+### Command-line Options
+
+There are two separate modes in SootSkeleton: `generator mode` and `runner mode`. By providing generator mode SootSkeleton with initial 
+parameters and formatted examples, it'll infer the most desirable configuration for Soot framework and generate the corresponding
+output in the path that was specified by the initial configuration (for more [examples](examples)). On the other hand, in the runner mode,
+SootSkeleton will request initial parameters and the Soot configuration that is produced by generator. By accepting these info, 
+Skeleton will analyze the given target in the context of previously generated configuration and spawn the output in the
+commandline. Following options are the commandline options SootSkeleton provides. Note that executing runner mode requests
+the previous configuration result that is produced by the generator. 
+
+``` text
 Runner Mode Options
     -r arg1 arg2:
         This Option indicates that you want to use the runner mode of SootSkeleton.
         And you need to pass two parameter. The first parameter should indicate the path to the initial loading
-        configuration. The second parameter should indicate the path to the Soot Configuration.
- 
-          
+        parameters. The second parameter should indicate the path to the Soot Configuration that was produced by
+        priously run of generator.
+
 Generator Mode Options:
     -cfg arg1:
-        This is the option to indicate the path towards the configuration(confige.yaml as describing in next part).
+        This is the option to indicate the path to the initial parameter.
     -exp arg1:
-        This is the option to the path towards the indicative examples.
-        
-     Note:
-        Both "-cfg arg1" and "-exp arg1" should be included for generator to perform correctly.   
-```
+        This is the option to specify the path to the indicative examples.
 
-### Format of initial configuration 
+Note: both "-cfg arg1" and "-exp arg1" should be included for generator to perform correctly.
 ```
-This is the general form of the initial configuration (those lines that start with "#" are all comments, you can ignore it whe
-when write your own files). This file's path should be passed in each run (for both Generator and runner, its path
-should be indicated in the arg1). Also note that the name of the file should be <name>.yaml.
+More examples will be provided in the next section.
 
+### <a name="example"></a> Example of Initial Configuration 
+
+The initial configuration is used by both the generator and runner. It is written in YAML. Following YAML file
+piece is a complete example SootSkeleton can accept.
+
+```yaml
 # To indicate whether input is an apk or a java source file.
 apk: "false"
 javaClass: "true"
@@ -50,14 +76,27 @@ pathToTargetDirectory: "test-resource"
 className: "DemoClass"
 # The ouptut path for the generated configuration.
 outputPath: "result2.yaml"
+```
+
+### Example of input-output Example Pairs
+
+Input-output example pairs are the generator's input that expresses the user's need. It is written in YAML. The content of example input should be 
+crafted in following format. NOTE: double quote or single quote don't make any difference.
+
+```yaml
+allClasses:
+  <@target class name>:
+    "<@ input1>": ['<@ output1>', '<@ output2>', ...]
+    "<@ input2>": ['<@ output1>', '<@ output2>', ...]
 
 ```
 
-### Format of Examples
-```
-Examples should also be included in certain format. It should be indicated by the methods, and its corresponding
-statement. Also note that the name of the file should be <name>.yaml.
+Following piece of yaml file is an instance that provides examples of DemoClass's call graphs.
+The input of this example is the caller methods' full signature and the output is the callee methods' 
+full signature. This example indicates users are trying to analyze the call graph in the context of DemoClass.
+And the the output arrays are the output that they hope to see in the end.
 
+```yaml
 # examples that users are looking forward to seeing inside the configuration
 allClasses:
   DemoClass:
@@ -67,7 +106,7 @@ allClasses:
                                           '<DemoClass: void overload(char)>',
                                           '<DemoClass: void overload(double)>',
                                           '<DemoClass: void overload(float)>',
-                                           '<DemoClass: void overload(long)>',
+                                          '<DemoClass: void overload(long)>',
                                           '<DemoClass: void overload(int)>',
                                           '<DemoClass: void overload(short)>']
     "<DemoClass: void main(java.lang.String[])>":
