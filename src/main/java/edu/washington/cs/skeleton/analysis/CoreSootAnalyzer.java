@@ -142,6 +142,13 @@ public class CoreSootAnalyzer {
                 outDegrees.add(outEdges.next().getTgt().toString());
             }
         }
+
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Printing Result >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (String key : this.callGraph.keySet()) {
+            for (String stmt : this.callGraph.get(key)) {
+                System.out.println(key + " : " + stmt);
+            }
+        }
     }
 
     /**
