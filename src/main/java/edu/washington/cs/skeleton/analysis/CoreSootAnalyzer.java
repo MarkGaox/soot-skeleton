@@ -102,6 +102,9 @@ public class CoreSootAnalyzer {
 
                         // find all invokeExpress in given configuration
                         System.out.println(current.getSignature() + " : "+ s.getInvokeExprBox().getValue().toString());
+                        if (reachingResult.get(current.getSignature()) == null) {
+                            reachingResult.put(current.getSignature(), new HashSet<String>());
+                        }
                         reachingResult.get(current.getSignature()).add(s.getInvokeExprBox().getValue().toString());
                         count++;
                     }

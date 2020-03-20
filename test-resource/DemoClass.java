@@ -77,22 +77,22 @@ public class DemoClass
     public void overload(short s) {
     }    
     public void overload(int i) {
-        //System.out.println("int");
+        System.out.println("int");
     }
     public void overload(long l) {
-    //    System.out.println("long");
+        System.out.println("long");
     }
     public void overload(float f) {
-      //  System.out.println("float");
+        System.out.println("float");
     }
     public void overload(double d) {
-        //System.out.println("double");
+        System.out.println("double");
     }    
     public void overload(char c) {
-       // System.out.println("char");
+       System.out.println("char");
     }    
     public void overload(boolean b) {
-       // System.out.println("boolean");
+       System.out.println("boolean");
     }    
 
     public static void main(String[] args) {
