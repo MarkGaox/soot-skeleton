@@ -1,4 +1,0 @@
-!!edu.washington.cs.skeleton.util.ResultConfig
-result: {CG_Spark_Verbose: false, CG_OR_RF: false, CG_Safe_New_Instance: false, CG_Spark_Enabled: false,
-  NOBODY_EXCLUDED: false, CG_Spark_OnFlyCg: false, CG_Cha_Enabled: false, WHOLE_PROGRAM: false,
-  IGNORE_RESOLUTION: false, VERBOSE: false, SET_APP: false, ALLOW_PHANTOM_REF: false}
