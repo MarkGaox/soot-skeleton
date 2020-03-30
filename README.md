@@ -1,9 +1,10 @@
-# SootSkeleton
+# soot-skeleton
 
 Generate a static analyzer based on user-provided example input-output pairs.
 The analysis are implemented using Soot framework. See implementation for details on configuration inference algorithm.
 
 ## Build
+Environment: Java 8
 
 Clone/Symlink the `android-platforms` folder (https://github.com/izgzhen/android-platforms):
 
@@ -80,13 +81,15 @@ outputPath: "result2.yaml"
 
 ### Example of input-output Example Pairs
 
-Input-output example pairs are the generator's input that expresses the user's need. It is written in YAML. The content of example input should be 
-crafted in following format. NOTE: double quote or single quote don't make any difference.
+The programmer needs to provide the name of the example file as well as the corresponding input-output pairs. Firstly, 
+you need to fill the place of `<@target name>` with the name of a specific target that you want to provide as an example. In addition,
+the input should indicated at `<@ input1>` and the corresponding outputs should be included at `["<@ output1>", "<@ output1>", ...]`.
+The number of the examples is not limited and the order doesn't matter. NOTE: double quote or single quote don't make any difference. 
 
 ```yaml
 allClasses:
-  <@target class name>:
-    "<@ input1>": ['<@ output1>', '<@ output2>', ...]
+  <@target name>:
+    "<@ input1>": ['<@ output1>', '<@ output1>', ...]
     "<@ input2>": ['<@ output1>', '<@ output2>', ...]
 
 ```
