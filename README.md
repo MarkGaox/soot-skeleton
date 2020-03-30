@@ -38,7 +38,7 @@ java -jar target/soot-skeleton-1.0-SNAPSHOT-jar-with-dependencies.jar -r src/tes
 
 There are two separate modes in SootSkeleton: `generator mode` and `runner mode`. By providing generator mode SootSkeleton with initial 
 parameters and formatted examples, it'll infer the most desirable configuration for Soot framework and generate the corresponding
-output in the path that was specified by the initial configuration (for more [examples](examples)). On the other hand, in the runner mode,
+output in the path that was specified by the initial parameters (for more [examples](examples)). On the other hand, in the runner mode,
 SootSkeleton will request initial parameters and the Soot configuration that is produced by generator. By accepting these info, 
 Skeleton will analyze the given target in the context of previously generated configuration and spawn the output in the
 commandline. Following options are the commandline options SootSkeleton provides. Note that executing runner mode requests
@@ -62,9 +62,9 @@ Note: both "-cfg arg1" and "-exp arg1" should be included for generator to perfo
 ```
 More examples will be provided in the next section.
 
-### <a name="example"></a> Example of Initial Configuration 
+### <a name="example"></a> Example of Initial Parameter File
 
-The initial configuration is used by both the generator and runner. It is written in YAML. Following YAML file
+The initial parameter file is used by both the generator and runner. It is written in YAML. Following YAML file
 piece is a complete example SootSkeleton can accept.
 
 ```yaml
