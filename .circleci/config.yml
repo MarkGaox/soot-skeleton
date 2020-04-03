@@ -5,7 +5,7 @@ jobs:
     - image: circleci/openjdk:8u171-jdk
     steps:
     - checkout
-    - run: javac test-resource/DemoClass.java
+    - run: make test
     - run: make
 workflows:
   version: 2

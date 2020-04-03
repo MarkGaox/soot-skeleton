@@ -56,6 +56,6 @@ public class AppTest {
         SkeletonSootOptions.SET_APP.setValue(true);
         SkeletonSootOptions.ALLOW_PHANTOM_REF.setValue(true);
         CoreSootAnalyzer analyzer = new CoreSootAnalyzer(false, CLASS_PATH, "DemoClass");
-        assertTrue(analyzer.count <= 1897 && analyzer.count >= 1890);
+        assertTrue(analyzer.count <= 1905 && analyzer.count >= 1890);
     }
 }
