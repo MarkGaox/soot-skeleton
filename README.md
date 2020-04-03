@@ -82,8 +82,10 @@ outputPath: "result2.yaml"
 ### Example of input-output Example Pairs
 
 The programmer needs to provide the name of the example file as well as the corresponding input-output pairs. Firstly, 
-you need to fill the place of `<@target name>` with the name of a specific target that you want to provide as an example. In addition,
-the input should indicated at `<@ input1>` and the corresponding outputs should be included at `["<@ output1>", "<@ output1>", ...]`.
+you need to fill the place of `<@target name>` with the name of a specific target that you want to provide as an example. 
+For example, if the target is a Java class, ABC.class, then this place should be filled in with "ABC" and if the analysis target
+is a jar file, CBA.jar, then the corresponding name should instead be "CBA". In short, it should be the name without extension.
+In addition, the input should indicated at `<@ input1>` and the corresponding outputs should be included at `["<@ output1>", "<@ output1>", ...]`.
 The number of the examples is not limited and the order doesn't matter. NOTE: double quote or single quote don't make any difference. 
 
 ```yaml
